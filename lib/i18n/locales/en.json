@@ -1,0 +1,67 @@
+{
+  "common": {
+    "settings": "Settings",
+    "save": "Save",
+    "cancel": "Cancel",
+    "language": "Language",
+    "theme": "Theme",
+    "role": "Role"
+  },
+  "nav": {
+    "overview": "Overview",
+    "predictions": "AI Predictions",
+    "grid": "Grid Interaction",
+    "buildings": "Buildings",
+    "config": "Configuration",
+    "reports": "Reports",
+    "settings": "Settings"
+  },
+  "roles": {
+    "facilityManager": "Facility Manager",
+    "utilityRep": "Utility Representative",
+    "bob": "Bob",
+    "alice": "Alice",
+    "facilityManagerDesc": "Manage buildings and equipment",
+    "utilityRepDesc": "Monitor grid and DR programs"
+  },
+  "theme": {
+    "light": "Light",
+    "dark": "Dark",
+    "system": "System"
+  },
+  "settings": {
+    "title": "Settings",
+    "subtitle": "Manage your preferences and account settings",
+    "appearance": "Appearance",
+    "appearanceDesc": "Customize how the application looks",
+    "language": "Language",
+    "languageDesc": "Select your preferred language",
+    "themeDesc": "Choose your preferred color scheme",
+    "notifications": "Notifications",
+    "notificationsDesc": "Configure notification preferences",
+    "profile": "Profile",
+    "profileDesc": "Update your profile information",
+    "roleDesc": "Switch between user perspectives",
+    "emailNotifications": "Email Notifications",
+    "emailNotificationsDesc": "Receive important updates via email",
+    "pushNotifications": "Push Notifications",
+    "pushNotificationsDesc": "Browser push notifications",
+    "drAlerts": "DR Event Alerts",
+    "drAlertsDesc": "Demand response event notifications",
+    "systemAlerts": "System Alerts",
+    "systemAlertsDesc": "System and equipment alerts",
+    "displayName": "Display Name",
+    "email": "Email",
+    "phone": "Phone",
+    "department": "Department",
+    "profileSaved": "Profile saved successfully"
+  },
+  "dashboard": {
+    "title": "Campus Overview",
+    "subtitle": "Real-time energy monitoring and control",
+    "totalLoad": "Total Campus Load",
+    "gridUtilization": "Grid Utilization",
+    "todaysSavings": "Today's Savings",
+    "carbonOffset": "Carbon Offset"
+  }
+}

@@ -4,6 +4,8 @@ import { Geist, Geist_Mono } from "next/font/google"
 import { Analytics } from "@vercel/analytics/next"
 import { Toaster } from "sonner"
 import { RoleProvider } from "@/lib/role-context"
+import { ThemeProvider } from "@/components/theme-provider"
+import { I18nProvider } from "@/lib/i18n/i18n-provider"
 import "./globals.css"
 
 const _geist = Geist({ subsets: ["latin"] })
@@ -25,9 +27,18 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className="dark">
+    <html lang="en" suppressHydrationWarning>
       <body className={`font-sans antialiased`}>
-        <RoleProvider>{children}</RoleProvider>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="dark"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <I18nProvider>
+            <RoleProvider>{children}</RoleProvider>
+          </I18nProvider>
+        </ThemeProvider>
         <Toaster
           position="bottom-right"
           toastOptions={{

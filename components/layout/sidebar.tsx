@@ -5,6 +5,7 @@ import type React from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useState } from "react"
+import { useTranslation } from "react-i18next"
 import { cn } from "@/lib/utils"
 import { useRole } from "@/lib/role-context"
 import {
@@ -18,6 +19,7 @@ import {
   ChevronRight,
   User,
   Users,
+  Settings2,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
@@ -25,25 +27,27 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 type UserRole = "facility-manager" | "utility-rep"
 
 interface NavItem {
-  title: string
+  titleKey: string
   href: string
   icon: React.ElementType
   roles: UserRole[]
 }
 
 const navItems: NavItem[] = [
-  { title: "Overview", href: "/", icon: LayoutDashboard, roles: ["facility-manager", "utility-rep"] },
-  { title: "AI Predictions", href: "/predictions", icon: Brain, roles: ["facility-manager", "utility-rep"] },
-  { title: "Grid Interaction", href: "/grid", icon: Zap, roles: ["facility-manager", "utility-rep"] },
-  { title: "Buildings", href: "/buildings", icon: Building2, roles: ["facility-manager"] },
-  { title: "Configuration", href: "/config", icon: Settings, roles: ["facility-manager"] },
-  { title: "Reports", href: "/reports", icon: FileBarChart, roles: ["facility-manager", "utility-rep"] },
+  { titleKey: "nav.overview", href: "/", icon: LayoutDashboard, roles: ["facility-manager", "utility-rep"] },
+  { titleKey: "nav.predictions", href: "/predictions", icon: Brain, roles: ["facility-manager", "utility-rep"] },
+  { titleKey: "nav.grid", href: "/grid", icon: Zap, roles: ["facility-manager", "utility-rep"] },
+  { titleKey: "nav.buildings", href: "/buildings", icon: Building2, roles: ["facility-manager"] },
+  { titleKey: "nav.config", href: "/config", icon: Settings, roles: ["facility-manager"] },
+  { titleKey: "nav.reports", href: "/reports", icon: FileBarChart, roles: ["facility-manager", "utility-rep"] },
+  { titleKey: "nav.settings", href: "/settings", icon: Settings2, roles: ["facility-manager", "utility-rep"] },
 ]
 
 export function Sidebar() {
   const [collapsed, setCollapsed] = useState(false)
   const { role, setRole } = useRole()
   const pathname = usePathname()
+  const { t } = useTranslation()
 
   const filteredNavItems = navItems.filter((item) => item.roles.includes(role))
 
@@ -69,7 +73,7 @@ export function Sidebar() {
         <div className={cn("px-3 py-4 border-b border-sidebar-border", collapsed && "px-2")}>
           {!collapsed ? (
             <div className="space-y-2">
-              <span className="text-xs text-muted-foreground uppercase tracking-wider">Role</span>
+              <span className="text-xs text-muted-foreground uppercase tracking-wider">{t('common.role')}</span>
               <div className="flex gap-1">
                 <Button
                   variant={role === "facility-manager" ? "default" : "ghost"}
@@ -78,7 +82,7 @@ export function Sidebar() {
                   onClick={() => setRole("facility-manager")}
                 >
                   <User className="w-3 h-3 mr-1" />
-                  Bob
+                  {t('roles.bob')}
                 </Button>
                 <Button
                   variant={role === "utility-rep" ? "default" : "ghost"}
@@ -87,7 +91,7 @@ export function Sidebar() {
                   onClick={() => setRole("utility-rep")}
                 >
                   <Users className="w-3 h-3 mr-1" />
-                  Alice
+                  {t('roles.alice')}
                 </Button>
               </div>
             </div>
@@ -104,7 +108,7 @@ export function Sidebar() {
                 </Button>
               </TooltipTrigger>
               <TooltipContent side="right">
-                {role === "facility-manager" ? "Bob (Facility Manager)" : "Alice (Utility Rep)"}
+                {role === "facility-manager" ? `${t('roles.bob')} (${t('roles.facilityManager')})` : `${t('roles.alice')} (${t('roles.utilityRep')})`}
               </TooltipContent>
             </Tooltip>
           )}
@@ -132,7 +136,7 @@ export function Sidebar() {
                       <Icon className="w-5 h-5" />
                     </Link>
                   </TooltipTrigger>
-                  <TooltipContent side="right">{item.title}</TooltipContent>
+                  <TooltipContent side="right">{t(item.titleKey)}</TooltipContent>
                 </Tooltip>
               )
             }
@@ -149,7 +153,7 @@ export function Sidebar() {
                 )}
               >
                 <Icon className="w-5 h-5" />
-                <span className="text-sm font-medium">{item.title}</span>
+                <span className="text-sm font-medium">{t(item.titleKey)}</span>
               </Link>
             )
           })}
