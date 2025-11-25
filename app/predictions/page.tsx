@@ -1,3 +1,6 @@
+"use client"
+
+import { useTranslation } from "react-i18next"
 import { Sidebar } from "@/components/layout/sidebar"
 import { Header } from "@/components/layout/header"
 import { StatCard } from "@/components/dashboard/stat-card"
@@ -5,14 +8,18 @@ import { PredictionChart } from "@/components/predictions/prediction-chart"
 import { WeeklyForecast } from "@/components/predictions/weekly-forecast"
 import { OptimizationSuggestions } from "@/components/predictions/optimization-suggestions"
 import { ModelMetrics } from "@/components/predictions/model-metrics"
+import { AuthGuard } from "@/components/auth/auth-guard"
 import { Brain, Target, TrendingDown, Zap } from "lucide-react"
 
 export default function PredictionsPage() {
+  const { t } = useTranslation()
+
   return (
+    <AuthGuard>
     <div className="flex h-screen overflow-hidden">
       <Sidebar />
       <div className="flex-1 flex flex-col overflow-hidden">
-        <Header title="AI Prediction Center" subtitle="Machine learning powered energy forecasting" />
+        <Header title={t('predictions.title')} subtitle={t('predictions.subtitle')} />
 
         <main className="flex-1 overflow-y-auto p-6 space-y-6">
           {/* Stats Row */}
@@ -114,5 +121,6 @@ export default function PredictionsPage() {
         </main>
       </div>
     </div>
+    </AuthGuard>
   )
 }

@@ -1,3 +1,6 @@
+"use client"
+
+import { useTranslation } from "react-i18next"
 import { Sidebar } from "@/components/layout/sidebar"
 import { Header } from "@/components/layout/header"
 import { StatCard } from "@/components/dashboard/stat-card"
@@ -6,14 +9,18 @@ import { DRPrograms } from "@/components/grid/dr-programs"
 import { AutomationRules } from "@/components/grid/automation-rules"
 import { PriceChart } from "@/components/grid/price-chart"
 import { RevenueCalculator } from "@/components/grid/revenue-calculator"
+import { AuthGuard } from "@/components/auth/auth-guard"
 import { Zap, DollarSign, Activity, Shield } from "lucide-react"
 
 export default function GridPage() {
+  const { t } = useTranslation()
+
   return (
+    <AuthGuard>
     <div className="flex h-screen overflow-hidden">
       <Sidebar />
       <div className="flex-1 flex flex-col overflow-hidden">
-        <Header title="Grid Interaction" subtitle="Demand response and utility coordination" />
+        <Header title={t('grid.title')} subtitle={t('grid.subtitle')} />
 
         <main className="flex-1 overflow-y-auto p-6 space-y-6">
           {/* Stats Row */}
@@ -117,5 +124,6 @@ export default function GridPage() {
         </main>
       </div>
     </div>
+    </AuthGuard>
   )
 }

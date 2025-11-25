@@ -8,6 +8,7 @@ import { useState } from "react"
 import { useTranslation } from "react-i18next"
 import { cn } from "@/lib/utils"
 import { useRole } from "@/lib/role-context"
+import { useAuth } from "@/lib/auth-context"
 import {
   LayoutDashboard,
   Brain,
@@ -17,9 +18,9 @@ import {
   FileBarChart,
   ChevronLeft,
   ChevronRight,
-  User,
-  Users,
+  LogOut,
   Settings2,
+  User,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
@@ -45,7 +46,8 @@ const navItems: NavItem[] = [
 
 export function Sidebar() {
   const [collapsed, setCollapsed] = useState(false)
-  const { role, setRole } = useRole()
+  const { role } = useRole()
+  const { user, logout } = useAuth()
   const pathname = usePathname()
   const { t } = useTranslation()
 
@@ -55,7 +57,7 @@ export function Sidebar() {
     <TooltipProvider delayDuration={0}>
       <aside
         className={cn(
-          "flex flex-col h-screen bg-sidebar border-r border-sidebar-border transition-all duration-300",
+          "hidden md:flex flex-col h-screen bg-sidebar border-r border-sidebar-border transition-all duration-300",
           collapsed ? "w-16" : "w-64",
         )}
       >
@@ -69,46 +71,33 @@ export function Sidebar() {
           </div>
         </div>
 
-        {/* Role Switcher */}
+        {/* User Info */}
         <div className={cn("px-3 py-4 border-b border-sidebar-border", collapsed && "px-2")}>
           {!collapsed ? (
-            <div className="space-y-2">
-              <span className="text-xs text-muted-foreground uppercase tracking-wider">{t('common.role')}</span>
-              <div className="flex gap-1">
-                <Button
-                  variant={role === "facility-manager" ? "default" : "ghost"}
-                  size="sm"
-                  className="flex-1 text-xs"
-                  onClick={() => setRole("facility-manager")}
-                >
-                  <User className="w-3 h-3 mr-1" />
-                  {t('roles.bob')}
-                </Button>
-                <Button
-                  variant={role === "utility-rep" ? "default" : "ghost"}
-                  size="sm"
-                  className="flex-1 text-xs"
-                  onClick={() => setRole("utility-rep")}
-                >
-                  <Users className="w-3 h-3 mr-1" />
-                  {t('roles.alice')}
-                </Button>
+            <div className="flex items-center gap-3">
+              <div className="w-9 h-9 rounded-full bg-primary/10 flex items-center justify-center">
+                <User className="w-5 h-5 text-primary" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-medium text-sidebar-foreground truncate">
+                  {user?.name || t('auth.guest')}
+                </p>
+                <p className="text-xs text-muted-foreground truncate">
+                  {role === "facility-manager" ? t('roles.facilityManager') : t('roles.utilityRep')}
+                </p>
               </div>
             </div>
           ) : (
             <Tooltip>
               <TooltipTrigger asChild>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="w-full"
-                  onClick={() => setRole(role === "facility-manager" ? "utility-rep" : "facility-manager")}
-                >
-                  {role === "facility-manager" ? <User className="w-4 h-4" /> : <Users className="w-4 h-4" />}
-                </Button>
+                <div className="w-full flex justify-center">
+                  <div className="w-9 h-9 rounded-full bg-primary/10 flex items-center justify-center">
+                    <User className="w-5 h-5 text-primary" />
+                  </div>
+                </div>
               </TooltipTrigger>
               <TooltipContent side="right">
-                {role === "facility-manager" ? `${t('roles.bob')} (${t('roles.facilityManager')})` : `${t('roles.alice')} (${t('roles.utilityRep')})`}
+                {user?.name || t('auth.guest')} ({role === "facility-manager" ? t('roles.facilityManager') : t('roles.utilityRep')})
               </TooltipContent>
             </Tooltip>
           )}
@@ -159,8 +148,36 @@ export function Sidebar() {
           })}
         </nav>
 
-        {/* Collapse Toggle */}
-        <div className="p-3 border-t border-sidebar-border">
+        {/* Bottom Section */}
+        <div className="p-3 border-t border-sidebar-border space-y-2">
+          {/* Logout Button */}
+          {!collapsed ? (
+            <Button
+              variant="ghost"
+              size="sm"
+              className="w-full justify-start text-muted-foreground hover:text-foreground"
+              onClick={logout}
+            >
+              <LogOut className="w-4 h-4 mr-2" />
+              {t('auth.logout')}
+            </Button>
+          ) : (
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="w-full text-muted-foreground hover:text-foreground"
+                  onClick={logout}
+                >
+                  <LogOut className="w-4 h-4" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent side="right">{t('auth.logout')}</TooltipContent>
+            </Tooltip>
+          )}
+
+          {/* Collapse Toggle */}
           <Button variant="ghost" size="sm" className="w-full justify-center" onClick={() => setCollapsed(!collapsed)}>
             {collapsed ? <ChevronRight className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />}
           </Button>

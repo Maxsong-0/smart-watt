@@ -1,12 +1,11 @@
 "use client"
 
-import { createContext, useContext, useState, useEffect, type ReactNode } from "react"
-
-type UserRole = "facility-manager" | "utility-rep"
+import { createContext, useContext, type ReactNode } from "react"
+import { useAuth } from "./auth-context"
+import type { UserRole } from "./mock-users"
 
 interface RoleContextType {
   role: UserRole
-  setRole: (role: UserRole) => void
   isBob: boolean
   isAlice: boolean
 }
@@ -14,25 +13,15 @@ interface RoleContextType {
 const RoleContext = createContext<RoleContextType | undefined>(undefined)
 
 export function RoleProvider({ children }: { children: ReactNode }) {
-  const [role, setRole] = useState<UserRole>("facility-manager")
+  const { user } = useAuth()
 
-  useEffect(() => {
-    const savedRole = localStorage.getItem("smartwatt-role") as UserRole | null
-    if (savedRole && (savedRole === "facility-manager" || savedRole === "utility-rep")) {
-      setRole(savedRole)
-    }
-  }, [])
-
-  const handleSetRole = (newRole: UserRole) => {
-    setRole(newRole)
-    localStorage.setItem("smartwatt-role", newRole)
-  }
+  // Default to facility-manager if no user is logged in
+  const role: UserRole = user?.role || "facility-manager"
 
   return (
     <RoleContext.Provider
       value={{
         role,
-        setRole: handleSetRole,
         isBob: role === "facility-manager",
         isAlice: role === "utility-rep",
       }}

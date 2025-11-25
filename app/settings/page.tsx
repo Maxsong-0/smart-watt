@@ -7,15 +7,16 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { SettingsSection, SettingsItem } from '@/components/settings/settings-section'
 import { LanguageSwitcher } from '@/components/settings/language-switcher'
 import { ThemeSwitcher } from '@/components/settings/theme-switcher'
-import { RoleSwitcher } from '@/components/settings/role-switcher'
 import { NotificationSettings } from '@/components/settings/notification-settings'
 import { ProfileSettings } from '@/components/settings/profile-settings'
-import { Palette, Bell, User, Users } from 'lucide-react'
+import { AuthGuard } from '@/components/auth/auth-guard'
+import { Palette, Bell, User } from 'lucide-react'
 
 export default function SettingsPage() {
   const { t } = useTranslation()
 
   return (
+    <AuthGuard>
     <div className="flex h-screen overflow-hidden">
       <Sidebar />
       <div className="flex-1 flex flex-col overflow-hidden">
@@ -27,10 +28,6 @@ export default function SettingsPage() {
               <TabsTrigger value="appearance" className="gap-2">
                 <Palette className="w-4 h-4" />
                 {t('settings.appearance')}
-              </TabsTrigger>
-              <TabsTrigger value="role" className="gap-2">
-                <Users className="w-4 h-4" />
-                {t('common.role')}
               </TabsTrigger>
               <TabsTrigger value="notifications" className="gap-2">
                 <Bell className="w-4 h-4" />
@@ -62,15 +59,6 @@ export default function SettingsPage() {
               </SettingsSection>
             </TabsContent>
 
-            <TabsContent value="role" className="space-y-6">
-              <SettingsSection
-                title={t('common.role')}
-                description={t('settings.roleDesc')}
-              >
-                <RoleSwitcher />
-              </SettingsSection>
-            </TabsContent>
-
             <TabsContent value="notifications" className="space-y-6">
               <SettingsSection
                 title={t('settings.notifications')}
@@ -92,5 +80,6 @@ export default function SettingsPage() {
         </main>
       </div>
     </div>
+    </AuthGuard>
   )
 }

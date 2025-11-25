@@ -5,7 +5,10 @@
     "cancel": "取消",
     "language": "语言",
     "theme": "主题",
-    "role": "角色"
+    "role": "角色",
+    "loading": "加载中...",
+    "error": "错误",
+    "success": "成功"
   },
   "nav": {
     "overview": "总览",
@@ -62,6 +65,69 @@
     "totalLoad": "园区总负载",
     "gridUtilization": "电网利用率",
     "todaysSavings": "今日节省",
-    "carbonOffset": "碳排放抵消"
+    "carbonOffset": "碳排放抵消",
+    "vsYesterday": "较昨日",
+    "vsAvg": "较平均",
+    "thisMonth": "本月",
+    "energyConsumption": "能源消耗",
+    "energyConsumptionDesc": "24小时趋势与AI预测",
+    "actual": "实际",
+    "predicted": "预测",
+    "demandResponse": "需求响应",
+    "campusMap": "园区地图",
+    "campusMapDesc": "建筑状态与负载分布",
+    "loadBreakdown": "负载分解"
+  },
+  "auth": {
+    "login": "登录",
+    "logout": "退出登录",
+    "register": "注册",
+    "email": "邮箱",
+    "password": "密码",
+    "confirmPassword": "确认密码",
+    "name": "姓名",
+    "namePlaceholder": "请输入您的姓名",
+    "rememberMe": "记住我",
+    "welcomeBack": "欢迎回来",
+    "loginSubtitle": "登录您的账户以继续",
+    "createAccount": "创建账户",
+    "registerSubtitle": "开始使用 Smart Watt",
+    "orQuickDemo": "或快速体验",
+    "noAccount": "还没有账户？",
+    "hasAccount": "已有账户？",
+    "loggingIn": "登录中...",
+    "registering": "注册中...",
+    "loginFailed": "登录失败",
+    "registerFailed": "注册失败",
+    "passwordMismatch": "两次输入的密码不一致",
+    "passwordTooShort": "密码长度至少为4个字符",
+    "selectRole": "选择您的角色",
+    "guest": "访客"
+  },
+  "errors": {
+    "forbidden": "访问被拒绝",
+    "forbiddenDesc": "您没有权限访问此页面。如果您认为这是一个错误，请联系管理员。",
+    "goHome": "返回首页",
+    "goBack": "返回上一页"
+  },
+  "buildings": {
+    "title": "建筑管理",
+    "subtitle": "监控和控制各个建筑"
+  },
+  "grid": {
+    "title": "电网交互",
+    "subtitle": "需求响应与电力公司协调"
+  },
+  "predictions": {
+    "title": "AI 预测中心",
+    "subtitle": "机器学习驱动的能源预测"
+  },
+  "config": {
+    "title": "系统配置",
+    "subtitle": "网关管理与协议映射"
+  },
+  "reports": {
+    "title": "报告与分析",
+    "subtitle": "ROI分析与节能报告"
   }
 }

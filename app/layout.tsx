@@ -3,9 +3,12 @@ import type { Metadata, Viewport } from "next"
 import { Geist, Geist_Mono } from "next/font/google"
 import { Analytics } from "@vercel/analytics/next"
 import { Toaster } from "sonner"
-import { RoleProvider } from "@/lib/role-context"
 import { ThemeProvider } from "@/components/theme-provider"
 import { I18nProvider } from "@/lib/i18n/i18n-provider"
+import { AuthProvider } from "@/lib/auth-context"
+import { RoleProvider } from "@/lib/role-context"
+import { MobileNavProvider } from "@/lib/mobile-nav-context"
+import { MobileSidebar } from "@/components/layout/mobile-sidebar"
 import "./globals.css"
 
 const _geist = Geist({ subsets: ["latin"] })
@@ -36,7 +39,14 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <I18nProvider>
-            <RoleProvider>{children}</RoleProvider>
+            <AuthProvider>
+              <RoleProvider>
+                <MobileNavProvider>
+                  {children}
+                  <MobileSidebar />
+                </MobileNavProvider>
+              </RoleProvider>
+            </AuthProvider>
           </I18nProvider>
         </ThemeProvider>
         <Toaster

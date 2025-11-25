@@ -1,3 +1,6 @@
+"use client"
+
+import { useTranslation } from "react-i18next"
 import { Sidebar } from "@/components/layout/sidebar"
 import { Header } from "@/components/layout/header"
 import { StatCard } from "@/components/dashboard/stat-card"
@@ -5,20 +8,23 @@ import { GatewayList } from "@/components/config/gateway-list"
 import { DeviceTable } from "@/components/config/device-table"
 import { SystemAlerts } from "@/components/config/system-alerts"
 import { ProtocolMapping } from "@/components/config/protocol-mapping"
+import { AuthGuard } from "@/components/auth/auth-guard"
 import { gateways, devices, systemAlerts } from "@/lib/mock-data"
 import { Network, Cpu, AlertCircle, Database } from "lucide-react"
 
 export default function ConfigPage() {
+  const { t } = useTranslation()
   const onlineGateways = gateways.filter((g) => g.status === "online").length
   const activeDevices = devices.filter((d) => d.status === "active").length
   const totalDataPoints = gateways.reduce((sum, g) => sum + g.dataPoints, 0)
   const unacknowledgedAlerts = systemAlerts.filter((a) => !a.acknowledged).length
 
   return (
+    <AuthGuard allowedRoles={["facility-manager"]}>
     <div className="flex h-screen overflow-hidden">
       <Sidebar />
       <div className="flex-1 flex flex-col overflow-hidden">
-        <Header title="System Configuration" subtitle="Gateway management and protocol mapping" />
+        <Header title={t('config.title')} subtitle={t('config.subtitle')} />
 
         <main className="flex-1 overflow-y-auto p-6 space-y-6">
           {/* Stats Row */}
@@ -95,5 +101,6 @@ export default function ConfigPage() {
         </main>
       </div>
     </div>
+    </AuthGuard>
   )
 }

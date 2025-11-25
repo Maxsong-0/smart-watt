@@ -5,7 +5,10 @@
     "cancel": "Cancel",
     "language": "Language",
     "theme": "Theme",
-    "role": "Role"
+    "role": "Role",
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success"
   },
   "nav": {
     "overview": "Overview",
@@ -62,6 +65,69 @@
     "totalLoad": "Total Campus Load",
     "gridUtilization": "Grid Utilization",
     "todaysSavings": "Today's Savings",
-    "carbonOffset": "Carbon Offset"
+    "carbonOffset": "Carbon Offset",
+    "vsYesterday": "vs yesterday",
+    "vsAvg": "vs avg",
+    "thisMonth": "this month",
+    "energyConsumption": "Energy Consumption",
+    "energyConsumptionDesc": "24-hour trend with AI predictions",
+    "actual": "Actual",
+    "predicted": "Predicted",
+    "demandResponse": "Demand Response",
+    "campusMap": "Campus Map",
+    "campusMapDesc": "Building status and load distribution",
+    "loadBreakdown": "Load Breakdown"
+  },
+  "auth": {
+    "login": "Login",
+    "logout": "Logout",
+    "register": "Register",
+    "email": "Email",
+    "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "name": "Name",
+    "namePlaceholder": "Enter your name",
+    "rememberMe": "Remember me",
+    "welcomeBack": "Welcome back",
+    "loginSubtitle": "Sign in to your account to continue",
+    "createAccount": "Create an account",
+    "registerSubtitle": "Get started with Smart Watt",
+    "orQuickDemo": "Or try a quick demo",
+    "noAccount": "Don't have an account?",
+    "hasAccount": "Already have an account?",
+    "loggingIn": "Logging in...",
+    "registering": "Registering...",
+    "loginFailed": "Login failed",
+    "registerFailed": "Registration failed",
+    "passwordMismatch": "Passwords do not match",
+    "passwordTooShort": "Password must be at least 4 characters",
+    "selectRole": "Select your role",
+    "guest": "Guest"
+  },
+  "errors": {
+    "forbidden": "Access Denied",
+    "forbiddenDesc": "You don't have permission to access this page. Please contact your administrator if you believe this is a mistake.",
+    "goHome": "Go to Home",
+    "goBack": "Go Back"
+  },
+  "buildings": {
+    "title": "Buildings",
+    "subtitle": "Monitor and control individual buildings"
+  },
+  "grid": {
+    "title": "Grid Interaction",
+    "subtitle": "Demand response and utility coordination"
+  },
+  "predictions": {
+    "title": "AI Prediction Center",
+    "subtitle": "Machine learning powered energy forecasting"
+  },
+  "config": {
+    "title": "System Configuration",
+    "subtitle": "Gateway management and protocol mapping"
+  },
+  "reports": {
+    "title": "Reports & Analytics",
+    "subtitle": "ROI analysis and savings reports"
   }
 }
