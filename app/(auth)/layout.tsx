@@ -2,6 +2,7 @@
 
 import { useEffect } from "react"
 import { useRouter } from "next/navigation"
+import { useTranslation } from "react-i18next"
 import { useAuth } from "@/lib/auth-context"
 
 export default function AuthLayout({
@@ -9,6 +10,7 @@ export default function AuthLayout({
 }: {
   children: React.ReactNode
 }) {
+  const { t } = useTranslation()
   const { isAuthenticated, isLoading } = useAuth()
   const router = useRouter()
 
@@ -21,7 +23,7 @@ export default function AuthLayout({
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background">
-        <div className="animate-pulse text-muted-foreground">Loading...</div>
+        <div className="animate-pulse text-muted-foreground">{t("common.loading")}</div>
       </div>
     )
   }
@@ -41,15 +43,14 @@ export default function AuthLayout({
         </div>
         <div className="space-y-4">
           <h2 className="text-4xl font-bold leading-tight">
-            Intelligent Energy<br />Management Platform
+            {t("auth.brandTagline")}
           </h2>
           <p className="text-lg text-muted-foreground max-w-md">
-            AI-powered campus energy management and grid interaction platform.
-            Optimize consumption, reduce costs, and achieve sustainability goals.
+            {t("auth.brandDescription")}
           </p>
         </div>
         <div className="text-sm text-muted-foreground">
-          © 2024 Smart Watt. All rights reserved.
+          {t("auth.copyright")}
         </div>
       </div>
 

@@ -1,8 +1,5 @@
 {
-  "/(auth)/login/page": "app/(auth)/login/page.js",
-  "/(auth)/register/page": "app/(auth)/register/page.js",
   "/buildings/page": "app/buildings/page.js",
-  "/config/page": "app/config/page.js",
   "/grid/page": "app/grid/page.js",
   "/page": "app/page.js",
   "/predictions/page": "app/predictions/page.js",

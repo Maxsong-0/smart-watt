@@ -8,12 +8,13 @@ interface RoleContextType {
   role: UserRole
   isBob: boolean
   isAlice: boolean
+  setRole: (role: UserRole) => void
 }
 
 const RoleContext = createContext<RoleContextType | undefined>(undefined)
 
 export function RoleProvider({ children }: { children: ReactNode }) {
-  const { user } = useAuth()
+  const { user, loginAsDemo } = useAuth()
 
   // Default to facility-manager if no user is logged in
   const role: UserRole = user?.role || "facility-manager"
@@ -24,6 +25,7 @@ export function RoleProvider({ children }: { children: ReactNode }) {
         role,
         isBob: role === "facility-manager",
         isAlice: role === "utility-rep",
+        setRole: loginAsDemo,
       }}
     >
       {children}

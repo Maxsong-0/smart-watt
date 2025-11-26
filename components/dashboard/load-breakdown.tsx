@@ -1,46 +1,12 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import { useTranslation } from "react-i18next"
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Sector } from "recharts"
 import { generateLoadBreakdown } from "@/lib/mock-data"
 
-const renderActiveShape = (props: any) => {
-  const { cx, cy, innerRadius, outerRadius, startAngle, endAngle, fill, payload, percent, value } = props
-
-  return (
-    <g>
-      <text x={cx} y={cy - 10} dy={8} textAnchor="middle" fill="var(--foreground)" className="text-sm font-bold">
-        {payload.name}
-      </text>
-      <text x={cx} y={cy + 10} dy={8} textAnchor="middle" fill="var(--muted-foreground)" className="text-xs">
-        {value}%
-      </text>
-      <Sector
-        cx={cx}
-        cy={cy}
-        innerRadius={innerRadius}
-        outerRadius={outerRadius + 8}
-        startAngle={startAngle}
-        endAngle={endAngle}
-        fill={fill}
-        style={{
-          filter: "drop-shadow(0 0 8px currentColor)",
-        }}
-      />
-      <Sector
-        cx={cx}
-        cy={cy}
-        startAngle={startAngle}
-        endAngle={endAngle}
-        innerRadius={outerRadius + 10}
-        outerRadius={outerRadius + 12}
-        fill={fill}
-      />
-    </g>
-  )
-}
-
 export function LoadBreakdown() {
+  const { t } = useTranslation()
   const [data, setData] = useState<ReturnType<typeof generateLoadBreakdown>>([])
   const [mounted, setMounted] = useState(false)
   const [activeIndex, setActiveIndex] = useState(0)
@@ -52,6 +18,42 @@ export function LoadBreakdown() {
 
   const onPieEnter = (_: any, index: number) => {
     setActiveIndex(index)
+  }
+
+  const renderActiveShape = (props: any) => {
+    const { cx, cy, innerRadius, outerRadius, startAngle, endAngle, fill, payload, percent, value } = props
+  
+    return (
+      <g>
+        <text x={cx} y={cy - 10} dy={8} textAnchor="middle" fill="var(--foreground)" className="text-sm font-bold">
+          {t(`common.loadTypes.${payload.name}`)}
+        </text>
+        <text x={cx} y={cy + 10} dy={8} textAnchor="middle" fill="var(--muted-foreground)" className="text-xs">
+          {value}%
+        </text>
+        <Sector
+          cx={cx}
+          cy={cy}
+          innerRadius={innerRadius}
+          outerRadius={outerRadius + 8}
+          startAngle={startAngle}
+          endAngle={endAngle}
+          fill={fill}
+          style={{
+            filter: "drop-shadow(0 0 8px currentColor)",
+          }}
+        />
+        <Sector
+          cx={cx}
+          cy={cy}
+          startAngle={startAngle}
+          endAngle={endAngle}
+          innerRadius={outerRadius + 10}
+          outerRadius={outerRadius + 12}
+          fill={fill}
+        />
+      </g>
+    )
   }
 
   if (!mounted) return <div className="h-[200px] animate-pulse bg-muted rounded-lg" />
@@ -86,7 +88,7 @@ export function LoadBreakdown() {
                 borderRadius: "8px",
                 fontSize: "12px",
               }}
-              formatter={(value: number) => [`${value}%`, "Share"]}
+              formatter={(value: number) => [`${value}%`, t('common.share') || 'Share']}
             />
           </PieChart>
         </ResponsiveContainer>
@@ -110,7 +112,7 @@ export function LoadBreakdown() {
                   boxShadow: activeIndex === index ? `0 0 8px ${item.color}` : "none",
                 }}
               />
-              <span className="text-sm text-muted-foreground">{item.name}</span>
+              <span className="text-sm text-muted-foreground">{t(`common.loadTypes.${item.name}`)}</span>
             </div>
             <span
               className={`text-sm font-medium font-mono transition-colors duration-300 ${

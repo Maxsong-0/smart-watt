@@ -1,6 +1,8 @@
 'use client'
 
 import { useTranslation } from 'react-i18next'
+import { Globe } from 'lucide-react'
+import { cn } from '@/lib/utils'
 import {
   Select,
   SelectContent,
@@ -8,32 +10,35 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { Globe } from 'lucide-react'
 
 const languages = [
-  { code: 'en', name: 'English', nativeName: 'English' },
-  { code: 'zh', name: 'Chinese', nativeName: '中文' },
-]
+  { code: 'en', labelKey: 'languages.en' },
+  { code: 'zh', labelKey: 'languages.zh' },
+] as const
 
-export function LanguageSwitcher() {
-  const { i18n } = useTranslation()
+interface LanguageSwitcherProps {
+  className?: string
+}
+
+export function LanguageSwitcher({ className }: LanguageSwitcherProps) {
+  const { i18n, t } = useTranslation()
 
   const handleLanguageChange = (value: string) => {
     i18n.changeLanguage(value)
   }
 
-  const currentLang = languages.find(l => l.code === i18n.language) || languages[0]
+  const currentLang = languages.find((l) => l.code === i18n.language) || languages[0]
 
   return (
     <Select value={i18n.language} onValueChange={handleLanguageChange}>
-      <SelectTrigger className="w-40">
+      <SelectTrigger className={cn('w-40', className)}>
         <Globe className="w-4 h-4 mr-2" />
-        <SelectValue>{currentLang.nativeName}</SelectValue>
+        <SelectValue>{t(currentLang.labelKey)}</SelectValue>
       </SelectTrigger>
       <SelectContent>
         {languages.map((lang) => (
           <SelectItem key={lang.code} value={lang.code}>
-            {lang.nativeName}
+            {t(lang.labelKey)}
           </SelectItem>
         ))}
       </SelectContent>

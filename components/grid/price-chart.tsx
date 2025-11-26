@@ -1,10 +1,12 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import { useTranslation } from "react-i18next"
 import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis, ReferenceLine } from "recharts"
 import { generatePriceHistory } from "@/lib/mock-data"
 
 export function PriceChart() {
+  const { t } = useTranslation()
   const [data, setData] = useState<ReturnType<typeof generatePriceHistory>>([])
   const [mounted, setMounted] = useState(false)
 
@@ -39,7 +41,7 @@ export function PriceChart() {
             fontSize={10}
             tickLine={false}
             axisLine={false}
-            tickFormatter={(value) => `$${value}`}
+            tickFormatter={(value) => `${t('common.units.currency')}${value}`}
             domain={[0, "dataMax + 0.05"]}
           />
           <Tooltip
@@ -49,13 +51,13 @@ export function PriceChart() {
               borderRadius: "8px",
               fontSize: "12px",
             }}
-            formatter={(value: number) => [`$${value.toFixed(3)}/kWh`, ""]}
+            formatter={(value: number) => [`${t('common.units.currency')}${value.toFixed(3)}/kWh`, t('grid.price.tooltipLabel')]}
           />
           <ReferenceLine
             y={0.12}
             stroke="var(--energy-yellow)"
             strokeDasharray="4 4"
-            label={{ value: "Avg", fill: "var(--energy-yellow)", fontSize: 9, position: "right" }}
+            label={{ value: t('grid.price.avgLabel'), fill: "var(--energy-yellow)", fontSize: 9, position: "right" }}
           />
           <Area
             type="monotone"

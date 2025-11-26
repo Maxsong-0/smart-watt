@@ -3,6 +3,7 @@
 import type React from "react"
 
 import { useState } from "react"
+import { useTranslation } from "react-i18next"
 import { gateways, type Gateway } from "@/lib/mock-data"
 import { cn } from "@/lib/utils"
 import { Badge } from "@/components/ui/badge"
@@ -51,6 +52,7 @@ const typeIcons: Record<Gateway["type"], React.ElementType> = {
 }
 
 export function GatewayList() {
+  const { t } = useTranslation()
   const [gatewayData, setGatewayData] = useState<Gateway[]>(gateways)
   const [isConfigDialogOpen, setIsConfigDialogOpen] = useState(false)
   const [editingGateway, setEditingGateway] = useState<Gateway | null>(null)
@@ -77,11 +79,11 @@ export function GatewayList() {
   const getStatusBadge = (status: Gateway["status"]) => {
     switch (status) {
       case "online":
-        return <Badge className="bg-energy-green/10 text-energy-green border-energy-green/30">Online</Badge>
+        return <Badge className="bg-energy-green/10 text-energy-green border-energy-green/30">{t('config.ui.online')}</Badge>
       case "offline":
-        return <Badge variant="secondary">Offline</Badge>
+        return <Badge variant="secondary">{t('config.ui.offline')}</Badge>
       case "error":
-        return <Badge className="bg-energy-red/10 text-energy-red border-energy-red/30">Error</Badge>
+        return <Badge className="bg-energy-red/10 text-energy-red border-energy-red/30">{t('config.ui.error')}</Badge>
     }
   }
 
@@ -90,14 +92,14 @@ export function GatewayList() {
     const seconds = Math.floor(diff / 1000)
     const minutes = Math.floor(diff / (60 * 1000))
 
-    if (seconds < 60) return `${seconds}s ago`
-    if (minutes < 60) return `${minutes}m ago`
-    return `${Math.floor(minutes / 60)}h ago`
+    if (seconds < 60) return t('config.ui.ago', { time: `${seconds}${t('config.ui.s')}` })
+    if (minutes < 60) return t('config.ui.ago', { time: `${minutes}${t('config.ui.m')}` })
+    return t('config.ui.ago', { time: `${Math.floor(minutes / 60)}${t('config.ui.h')}` })
   }
 
   const handleRestartGateway = async (gateway: Gateway) => {
     setRestartingId(gateway.id)
-    toast.info("Restarting gateway...", { description: gateway.name })
+    toast.info(t('config.ui.restarting'), { description: t(gateway.name) })
 
     // Simulate restart - set to offline first
     setGatewayData((prev) => prev.map((g) => (g.id === gateway.id ? { ...g, status: "offline" as const } : g)))
@@ -110,13 +112,13 @@ export function GatewayList() {
     )
 
     setRestartingId(null)
-    toast.success("Gateway restarted successfully", { description: gateway.name })
+    toast.success(t('common.success'), { description: t(gateway.name) })
   }
 
   const handleConfigureGateway = (gateway: Gateway) => {
     setEditingGateway(gateway)
     setNewGateway({
-      name: gateway.name,
+      name: t(gateway.name), // This might be tricky if we want to edit the key vs value, but for mock purposes showing the translated name is fine, though editing it won't update the key.
       type: gateway.type,
       ip: gateway.ip,
       port: gateway.port.toString(),
@@ -126,7 +128,7 @@ export function GatewayList() {
 
   const handleSaveGateway = async () => {
     if (!newGateway.name || !newGateway.ip || !newGateway.port) {
-      toast.error("Please fill in all fields")
+      toast.error(t('common.error'))
       return
     }
 
@@ -139,7 +141,7 @@ export function GatewayList() {
           g.id === editingGateway.id
             ? {
                 ...g,
-                name: newGateway.name,
+                name: newGateway.name, // In a real app, we'd handle name updates differently
                 type: newGateway.type,
                 ip: newGateway.ip,
                 port: Number.parseInt(newGateway.port),
@@ -147,7 +149,7 @@ export function GatewayList() {
             : g,
         ),
       )
-      toast.success("Gateway configuration updated")
+      toast.success(t('common.success'))
     } else {
       const gateway: Gateway = {
         id: `gw-${Date.now()}`,
@@ -161,7 +163,7 @@ export function GatewayList() {
         lastSeen: new Date(),
       }
       setGatewayData((prev) => [...prev, gateway])
-      toast.success("Gateway added successfully", { description: "Waiting for connection..." })
+      toast.success(t('common.success'))
     }
 
     setIsSaving(false)
@@ -172,12 +174,12 @@ export function GatewayList() {
 
   const handleDeleteGateway = (gateway: Gateway) => {
     setGatewayData((prev) => prev.filter((g) => g.id !== gateway.id))
-    toast.success("Gateway removed", { description: gateway.name })
+    toast.success(t('config.ui.remove'), { description: t(gateway.name) })
   }
 
   const handleTogglePower = async (gateway: Gateway) => {
     const isOnline = gateway.status === "online"
-    toast.info(isOnline ? "Shutting down..." : "Starting up...", { description: gateway.name })
+    toast.info(isOnline ? t('config.ui.shutdown') : t('config.ui.start'), { description: t(gateway.name) })
 
     setGatewayData((prev) =>
       prev.map((g) =>
@@ -188,7 +190,7 @@ export function GatewayList() {
     )
 
     await new Promise((resolve) => setTimeout(resolve, 500))
-    toast.success(isOnline ? "Gateway offline" : "Gateway online", { description: gateway.name })
+    toast.success(isOnline ? t('config.ui.offline') : t('config.ui.online'), { description: t(gateway.name) })
   }
 
   return (
@@ -230,7 +232,7 @@ export function GatewayList() {
                   />
                 </div>
                 <div>
-                  <h4 className="font-medium text-sm">{gateway.name}</h4>
+                  <h4 className="font-medium text-sm">{t(gateway.name)}</h4>
                   <p className="text-xs text-muted-foreground">
                     {gateway.ip}:{gateway.port}
                   </p>
@@ -248,25 +250,25 @@ export function GatewayList() {
                   <DropdownMenuContent align="end">
                     <DropdownMenuItem onClick={() => handleConfigureGateway(gateway)}>
                       <Settings className="w-4 h-4 mr-2" />
-                      Configure
+                      {t('config.ui.configure')}
                     </DropdownMenuItem>
                     <DropdownMenuItem
                       onClick={() => handleRestartGateway(gateway)}
                       disabled={isRestarting || gateway.status === "offline"}
                     >
                       <RefreshCw className={cn("w-4 h-4 mr-2", isRestarting && "animate-spin")} />
-                      {isRestarting ? "Restarting..." : "Restart"}
+                      {isRestarting ? t('config.ui.restarting') : t('config.ui.restart')}
                     </DropdownMenuItem>
                     <DropdownMenuItem onClick={() => handleTogglePower(gateway)}>
                       {gateway.status === "online" ? (
                         <>
                           <PowerOff className="w-4 h-4 mr-2" />
-                          Shutdown
+                          {t('config.ui.shutdown')}
                         </>
                       ) : (
                         <>
                           <Power className="w-4 h-4 mr-2" />
-                          Start
+                          {t('config.ui.start')}
                         </>
                       )}
                     </DropdownMenuItem>
@@ -276,7 +278,7 @@ export function GatewayList() {
                       onClick={() => handleDeleteGateway(gateway)}
                     >
                       <Trash2 className="w-4 h-4 mr-2" />
-                      Remove
+                      {t('config.ui.remove')}
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
@@ -285,19 +287,19 @@ export function GatewayList() {
 
             <div className="grid grid-cols-4 gap-4 mt-4 text-xs">
               <div>
-                <p className="text-muted-foreground">Protocol</p>
+                <p className="text-muted-foreground">{t('config.ui.protocol')}</p>
                 <p className="font-medium uppercase">{gateway.type}</p>
               </div>
               <div>
-                <p className="text-muted-foreground">Devices</p>
+                <p className="text-muted-foreground">{t('config.ui.devices')}</p>
                 <p className="font-medium">{gateway.devices}</p>
               </div>
               <div>
-                <p className="text-muted-foreground">Data Points</p>
+                <p className="text-muted-foreground">{t('config.ui.dataPoints')}</p>
                 <p className="font-medium">{gateway.dataPoints.toLocaleString()}</p>
               </div>
               <div>
-                <p className="text-muted-foreground">Last Seen</p>
+                <p className="text-muted-foreground">{t('config.ui.lastSeen')}</p>
                 <p className={cn("font-medium", gateway.status === "error" && "text-energy-red")}>
                   {formatLastSeen(gateway.lastSeen)}
                 </p>
@@ -317,20 +319,20 @@ export function GatewayList() {
         }}
       >
         <Plus className="w-4 h-4 mr-2" />
-        Add Gateway
+        {t('config.ui.addGateway')}
       </Button>
 
       <Dialog open={isConfigDialogOpen} onOpenChange={setIsConfigDialogOpen}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
-            <DialogTitle>{editingGateway ? "Configure Gateway" : "Add Gateway"}</DialogTitle>
+            <DialogTitle>{editingGateway ? t('config.ui.configure') : t('config.ui.addGateway')}</DialogTitle>
             <DialogDescription>
-              {editingGateway ? "Modify the gateway configuration." : "Add a new gateway to your network."}
+              {editingGateway ? t('config.ui.modifyGatewayDesc') : t('config.ui.addGatewayDesc')}
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4 py-4">
             <div className="space-y-2">
-              <Label htmlFor="gateway-name">Gateway Name</Label>
+              <Label htmlFor="gateway-name">{t('config.ui.gatewayName')}</Label>
               <Input
                 id="gateway-name"
                 placeholder="e.g., Main BACnet Gateway"
@@ -339,7 +341,7 @@ export function GatewayList() {
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="protocol">Protocol</Label>
+              <Label htmlFor="protocol">{t('config.ui.protocol')}</Label>
               <Select
                 value={newGateway.type}
                 onValueChange={(value) => setNewGateway((prev) => ({ ...prev, type: value as Gateway["type"] }))}
@@ -357,7 +359,7 @@ export function GatewayList() {
             </div>
             <div className="grid grid-cols-2 gap-3">
               <div className="space-y-2">
-                <Label htmlFor="ip">IP Address</Label>
+                <Label htmlFor="ip">{t('config.ui.ipAddress')}</Label>
                 <Input
                   id="ip"
                   placeholder="192.168.1.100"
@@ -366,7 +368,7 @@ export function GatewayList() {
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="port">Port</Label>
+                <Label htmlFor="port">{t('config.ui.port')}</Label>
                 <Input
                   id="port"
                   placeholder="47808"
@@ -378,18 +380,18 @@ export function GatewayList() {
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setIsConfigDialogOpen(false)}>
-              Cancel
+              {t('common.cancel')}
             </Button>
             <Button onClick={handleSaveGateway} disabled={isSaving}>
               {isSaving ? (
                 <>
                   <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                  Saving...
+                  {t('config.ui.saving')}
                 </>
               ) : (
                 <>
                   <Check className="w-4 h-4 mr-2" />
-                  {editingGateway ? "Update" : "Add"}
+                  {editingGateway ? t('config.ui.update') : t('config.ui.add')}
                 </>
               )}
             </Button>

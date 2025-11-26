@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { useTranslation } from "react-i18next"
 import { drEvents, type DREvent } from "@/lib/mock-data"
 import { Zap, Clock, DollarSign, Target, Activity } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
@@ -8,6 +9,7 @@ import { Progress } from "@/components/ui/progress"
 import { cn } from "@/lib/utils"
 
 export function DRStatus() {
+  const { t, i18n } = useTranslation()
   const [mounted, setMounted] = useState(false)
   const [progress, setProgress] = useState(0)
   const activeEvent = drEvents.find((e) => e.status === "active")
@@ -29,18 +31,18 @@ export function DRStatus() {
         return (
           <Badge className="bg-energy-cyan text-primary-foreground animate-pulse gap-1">
             <Activity className="w-3 h-3" />
-            Active
+            {t('status.active')}
           </Badge>
         )
       case "pending":
-        return <Badge variant="secondary">Pending</Badge>
+        return <Badge variant="secondary">{t('dashboard.drStatus.pending')}</Badge>
       case "completed":
-        return <Badge variant="outline">Completed</Badge>
+        return <Badge variant="outline">{t('dashboard.drStatus.completed')}</Badge>
     }
   }
 
   const formatTime = (date: Date) => {
-    return date.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" })
+    return date.toLocaleTimeString(i18n.language || "en", { hour: "2-digit", minute: "2-digit" })
   }
 
   const getProgress = (event: DREvent) => {
@@ -71,7 +73,7 @@ export function DRStatus() {
                 <Zap className="w-5 h-5 text-energy-cyan" />
                 <span className="absolute inset-0 bg-energy-cyan/30 rounded-full animate-ripple" />
               </div>
-              <span className="font-semibold">Active DR Event</span>
+              <span className="font-semibold">{t('dashboard.drStatus.activeEvent')}</span>
             </div>
             {getStatusBadge(activeEvent.status)}
           </div>
@@ -85,7 +87,7 @@ export function DRStatus() {
             </div>
             <div className="flex items-center gap-2 text-sm">
               <DollarSign className="w-4 h-4 text-energy-green" />
-              <span className="text-energy-green font-medium font-mono">${activeEvent.incentive}</span>
+              <span className="text-energy-green font-medium font-mono">{t('common.units.currency')}{activeEvent.incentive}</span>
             </div>
           </div>
 
@@ -93,10 +95,10 @@ export function DRStatus() {
             <div className="flex items-center justify-between text-sm">
               <div className="flex items-center gap-2">
                 <Target className="w-4 h-4 text-muted-foreground" />
-                <span className="text-muted-foreground">Reduction Progress</span>
+                <span className="text-muted-foreground">{t('dashboard.drStatus.reductionProgress')}</span>
               </div>
               <span className="font-medium font-mono">
-                {activeEvent.actualReduction} / {activeEvent.targetReduction} kW
+                {activeEvent.actualReduction} / {activeEvent.targetReduction} {t('common.units.kw')}
               </span>
             </div>
             <div className="relative">
@@ -106,7 +108,7 @@ export function DRStatus() {
               </span>
             </div>
             <div className="flex justify-between text-xs text-muted-foreground">
-              <span>Event Progress</span>
+              <span>{t('dashboard.drStatus.eventProgress')}</span>
               <span className="font-mono">{getProgress(activeEvent)}%</span>
             </div>
             <Progress value={getProgress(activeEvent)} className="h-1" />
@@ -116,7 +118,7 @@ export function DRStatus() {
 
       {pendingEvents.length > 0 && (
         <div className="space-y-2">
-          <h4 className="text-sm font-medium text-muted-foreground">Upcoming Events</h4>
+          <h4 className="text-sm font-medium text-muted-foreground">{t('dashboard.drStatus.upcomingEvents')}</h4>
           {pendingEvents.map((event, index) => (
             <div
               key={event.id}
@@ -133,15 +135,15 @@ export function DRStatus() {
                   <Zap className="w-4 h-4 text-muted-foreground" />
                 </div>
                 <div>
-                  <p className="text-sm font-medium capitalize">{event.type} Event</p>
+                  <p className="text-sm font-medium capitalize">{t(`grid.types.${event.type}`)} {t('dashboard.drStatus.event')}</p>
                   <p className="text-xs text-muted-foreground font-mono">
                     {formatTime(event.startTime)} - {formatTime(event.endTime)}
                   </p>
                 </div>
               </div>
               <div className="text-right">
-                <p className="text-sm font-medium text-energy-green font-mono">${event.incentive}</p>
-                <p className="text-xs text-muted-foreground">{event.targetReduction} kW</p>
+                <p className="text-sm font-medium text-energy-green font-mono">{t('common.units.currency')}{event.incentive}</p>
+                <p className="text-xs text-muted-foreground">{event.targetReduction} {t('common.units.kw')}</p>
               </div>
             </div>
           ))}

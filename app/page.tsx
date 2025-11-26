@@ -31,7 +31,7 @@ export default function DashboardPage() {
             <StatCard
               title={t('dashboard.totalLoad')}
               value={totalLoad.toLocaleString()}
-              unit="kW"
+              unit={t('common.units.kw')}
               change={-3.2}
               changeLabel={t('dashboard.vsYesterday')}
               icon={<Zap className="w-5 h-5" />}
@@ -39,13 +39,13 @@ export default function DashboardPage() {
             <StatCard
               title={t('dashboard.gridUtilization')}
               value={utilizationPercent}
-              unit="%"
+              unit={t('common.units.percentage')}
               variant={utilizationPercent > 80 ? "warning" : "default"}
               icon={<Thermometer className="w-5 h-5" />}
             />
             <StatCard
               title={t('dashboard.todaysSavings')}
-              value="$1,247"
+              value={t('common.units.currency') + "1,247"}
               change={12.5}
               changeLabel={t('dashboard.vsAvg')}
               variant="success"
@@ -54,7 +54,7 @@ export default function DashboardPage() {
             <StatCard
               title={t('dashboard.carbonOffset')}
               value="2.4"
-              unit="tons"
+              unit={t('common.units.tons')}
               change={8.3}
               changeLabel={t('dashboard.thisMonth')}
               icon={<Leaf className="w-5 h-5" />}

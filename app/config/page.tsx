@@ -30,27 +30,27 @@ export default function ConfigPage() {
           {/* Stats Row */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             <StatCard
-              title="Gateways Online"
+              title={t('config.stats.gatewaysOnline')}
               value={onlineGateways}
               unit={`/ ${gateways.length}`}
               variant={onlineGateways < gateways.length ? "warning" : "success"}
               icon={<Network className="w-5 h-5" />}
             />
             <StatCard
-              title="Active Devices"
+              title={t('config.stats.activeDevices')}
               value={activeDevices}
               unit={`/ ${devices.length}`}
               icon={<Cpu className="w-5 h-5" />}
             />
             <StatCard
-              title="Data Points"
+              title={t('config.stats.dataPoints')}
               value={totalDataPoints.toLocaleString()}
               change={2.4}
-              changeLabel="vs last week"
+              changeLabel={t('config.stats.changeLabel')}
               icon={<Database className="w-5 h-5" />}
             />
             <StatCard
-              title="Active Alerts"
+              title={t('config.stats.activeAlerts')}
               value={unacknowledgedAlerts}
               variant={unacknowledgedAlerts > 0 ? "danger" : "success"}
               icon={<AlertCircle className="w-5 h-5" />}
@@ -62,8 +62,8 @@ export default function ConfigPage() {
             {/* Gateways */}
             <div className="rounded-lg border border-border bg-card p-4">
               <div className="mb-4">
-                <h3 className="font-semibold">Gateways</h3>
-                <p className="text-sm text-muted-foreground">Protocol interfaces</p>
+                <h3 className="font-semibold">{t('config.sections.gatewaysTitle')}</h3>
+                <p className="text-sm text-muted-foreground">{t('config.sections.gatewaysDesc')}</p>
               </div>
               <GatewayList />
             </div>
@@ -71,8 +71,8 @@ export default function ConfigPage() {
             {/* Devices Table */}
             <div className="lg:col-span-2 rounded-lg border border-border bg-card p-4">
               <div className="mb-4">
-                <h3 className="font-semibold">Registered Devices</h3>
-                <p className="text-sm text-muted-foreground">Connected equipment and sensors</p>
+                <h3 className="font-semibold">{t('config.sections.devicesTitle')}</h3>
+                <p className="text-sm text-muted-foreground">{t('config.sections.devicesDesc')}</p>
               </div>
               <DeviceTable />
             </div>
@@ -83,8 +83,8 @@ export default function ConfigPage() {
             {/* Protocol Mapping */}
             <div className="rounded-lg border border-border bg-card p-4">
               <div className="mb-4">
-                <h3 className="font-semibold">Protocol Mapping</h3>
-                <p className="text-sm text-muted-foreground">Point name normalization</p>
+                <h3 className="font-semibold">{t('config.sections.mappingTitle')}</h3>
+                <p className="text-sm text-muted-foreground">{t('config.sections.mappingDesc')}</p>
               </div>
               <ProtocolMapping />
             </div>
@@ -92,8 +92,8 @@ export default function ConfigPage() {
             {/* System Alerts */}
             <div className="rounded-lg border border-border bg-card p-4">
               <div className="mb-4">
-                <h3 className="font-semibold">System Alerts</h3>
-                <p className="text-sm text-muted-foreground">Connection and data issues</p>
+                <h3 className="font-semibold">{t('config.sections.alertsTitle')}</h3>
+                <p className="text-sm text-muted-foreground">{t('config.sections.alertsDesc')}</p>
               </div>
               <SystemAlerts />
             </div>

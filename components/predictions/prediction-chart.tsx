@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import { useTranslation } from "react-i18next"
 import {
   Area,
   CartesianGrid,
@@ -17,6 +18,7 @@ import { Badge } from "@/components/ui/badge"
 import { Brain, TrendingUp } from "lucide-react"
 
 export function PredictionChart() {
+  const { t, i18n } = useTranslation()
   const [data, setData] = useState<PredictionData[]>([])
   const [mounted, setMounted] = useState(false)
   const [animationActive, setAnimationActive] = useState(true)
@@ -32,7 +34,7 @@ export function PredictionChart() {
   if (!mounted) return <div className="h-[350px] animate-pulse bg-muted rounded-lg" />
 
   const chartData = data.map((d) => ({
-    time: d.timestamp.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" }),
+    time: d.timestamp.toLocaleTimeString(i18n.language || "en", { hour: "2-digit", minute: "2-digit" }),
     hour: d.timestamp.getHours(),
     actual: d.actual,
     predicted: d.predicted,
@@ -50,12 +52,12 @@ export function PredictionChart() {
       <div className="absolute top-0 right-0 flex items-center gap-2 z-10">
         <Badge variant="outline" className="gap-1 bg-card/80 backdrop-blur-sm">
           <Brain className="w-3 h-3 text-energy-cyan" />
-          <span className="text-xs">LSTM Model</span>
+          <span className="text-xs">{t('predictions.chart.modelBadge')}</span>
         </Badge>
         <Badge variant="outline" className="gap-1 bg-card/80 backdrop-blur-sm text-energy-yellow">
           <TrendingUp className="w-3 h-3" />
           <span className="text-xs">
-            Peak: {peakTime} ({Math.round(peakPredicted)} kW)
+            {t('predictions.chart.peak')}: {peakTime} ({Math.round(peakPredicted)} {t('common.units.kw')})
           </span>
         </Badge>
       </div>
@@ -107,7 +109,10 @@ export function PredictionChart() {
               labelStyle={{ color: "var(--foreground)" }}
               formatter={(value: number, name: string) => {
                 if (name === "upper" || name === "lower") return null
-                return [value ? `${Math.round(value)} kW` : "-", name === "actual" ? "Actual" : "Predicted"]
+                return [
+                  value ? `${Math.round(value)} ${t('common.units.kw')}` : "-",
+                  name === "actual" ? t('predictions.chart.legendActual') : t('predictions.chart.legendPredicted'),
+                ]
               }}
             />
 
@@ -138,7 +143,7 @@ export function PredictionChart() {
                 stroke="var(--energy-cyan)"
                 strokeWidth={2}
                 strokeDasharray="4 4"
-                label={{ value: "Now", fill: "var(--energy-cyan)", fontSize: 11, position: "top" }}
+                label={{ value: t('predictions.chart.now'), fill: "var(--energy-cyan)", fontSize: 11, position: "top" }}
               />
             )}
 

@@ -32,7 +32,7 @@ export interface DREvent {
 export const buildings: Building[] = [
   {
     id: "eng-1",
-    name: "Engineering Hall",
+    name: "buildings.names.eng-1",
     type: "academic",
     currentLoad: 245,
     maxCapacity: 400,
@@ -43,7 +43,7 @@ export const buildings: Building[] = [
   },
   {
     id: "sci-1",
-    name: "Science Center",
+    name: "buildings.names.sci-1",
     type: "academic",
     currentLoad: 312,
     maxCapacity: 350,
@@ -54,7 +54,7 @@ export const buildings: Building[] = [
   },
   {
     id: "lib-1",
-    name: "Main Library",
+    name: "buildings.names.lib-1",
     type: "library",
     currentLoad: 156,
     maxCapacity: 300,
@@ -65,7 +65,7 @@ export const buildings: Building[] = [
   },
   {
     id: "res-1",
-    name: "North Residence",
+    name: "buildings.names.res-1",
     type: "residential",
     currentLoad: 89,
     maxCapacity: 200,
@@ -76,7 +76,7 @@ export const buildings: Building[] = [
   },
   {
     id: "res-2",
-    name: "South Residence",
+    name: "buildings.names.res-2",
     type: "residential",
     currentLoad: 112,
     maxCapacity: 200,
@@ -87,7 +87,7 @@ export const buildings: Building[] = [
   },
   {
     id: "admin-1",
-    name: "Admin Building",
+    name: "buildings.names.admin-1",
     type: "admin",
     currentLoad: 78,
     maxCapacity: 150,
@@ -98,7 +98,7 @@ export const buildings: Building[] = [
   },
   {
     id: "gym-1",
-    name: "Sports Complex",
+    name: "buildings.names.gym-1",
     type: "sports",
     currentLoad: 198,
     maxCapacity: 500,
@@ -248,8 +248,8 @@ export function generateWeeklyForecast(): { day: string; predicted: number; last
 export const optimizationSuggestions: OptimizationSuggestion[] = [
   {
     id: "opt-1",
-    title: "Pre-cool Science Center before peak hours",
-    description: "Start cooling at 6 AM instead of 8 AM to reduce peak demand by shifting load to off-peak hours.",
+    title: "predictions.suggestions.opt-1.title",
+    description: "predictions.suggestions.opt-1.desc",
     potentialSavings: 320,
     confidence: 92,
     category: "hvac",
@@ -258,8 +258,8 @@ export const optimizationSuggestions: OptimizationSuggestion[] = [
   },
   {
     id: "opt-2",
-    title: "Reduce lighting in unoccupied zones",
-    description: "Occupancy sensors indicate 40% of Main Library zones are unused. Dim lights to 30%.",
+    title: "predictions.suggestions.opt-2.title",
+    description: "predictions.suggestions.opt-2.desc",
     potentialSavings: 85,
     confidence: 88,
     category: "lighting",
@@ -268,8 +268,8 @@ export const optimizationSuggestions: OptimizationSuggestion[] = [
   },
   {
     id: "opt-3",
-    title: "Shift EV charging to overnight",
-    description: "Current EV charging coincides with peak hours. Scheduling overnight can save $180/day.",
+    title: "predictions.suggestions.opt-3.title",
+    description: "predictions.suggestions.opt-3.desc",
     potentialSavings: 180,
     confidence: 95,
     category: "load-shift",
@@ -278,8 +278,8 @@ export const optimizationSuggestions: OptimizationSuggestion[] = [
   },
   {
     id: "opt-4",
-    title: "Optimize Sports Complex HVAC schedule",
-    description: "Reduce HVAC 2 hours before closing based on thermal inertia modeling.",
+    title: "predictions.suggestions.opt-4.title",
+    description: "predictions.suggestions.opt-4.desc",
     potentialSavings: 145,
     confidence: 78,
     category: "scheduling",
@@ -366,7 +366,7 @@ export const gridSignals: GridSignal[] = [
     id: "sig-1",
     type: "price",
     severity: "warning",
-    message: "High electricity price period starting",
+    message: "grid.signals.sig-1",
     timestamp: new Date(Date.now() - 15 * 60 * 1000),
     expiresAt: new Date(Date.now() + 2 * 60 * 60 * 1000),
     priceMultiplier: 2.5,
@@ -375,7 +375,7 @@ export const gridSignals: GridSignal[] = [
     id: "sig-2",
     type: "renewable",
     severity: "info",
-    message: "High solar generation available",
+    message: "grid.signals.sig-2",
     timestamp: new Date(Date.now() - 30 * 60 * 1000),
     expiresAt: new Date(Date.now() + 4 * 60 * 60 * 1000),
   },
@@ -383,7 +383,7 @@ export const gridSignals: GridSignal[] = [
     id: "sig-3",
     type: "capacity",
     severity: "critical",
-    message: "Grid capacity constraint - DR event triggered",
+    message: "grid.signals.sig-3",
     timestamp: new Date(Date.now() - 5 * 60 * 60 * 1000),
     expiresAt: new Date(Date.now() + 90 * 60 * 60 * 1000),
   },
@@ -392,7 +392,7 @@ export const gridSignals: GridSignal[] = [
 export const drPrograms: DRProgram[] = [
   {
     id: "prog-1",
-    name: "Peak Demand Response",
+    name: "grid.programs.prog-1",
     type: "capacity",
     enrolled: true,
     maxCommitment: 300,
@@ -403,7 +403,7 @@ export const drPrograms: DRProgram[] = [
   },
   {
     id: "prog-2",
-    name: "Emergency Load Shed",
+    name: "grid.programs.prog-2",
     type: "emergency",
     enrolled: true,
     maxCommitment: 500,
@@ -414,7 +414,7 @@ export const drPrograms: DRProgram[] = [
   },
   {
     id: "prog-3",
-    name: "Real-Time Pricing",
+    name: "grid.programs.prog-3",
     type: "energy",
     enrolled: true,
     maxCommitment: 200,
@@ -425,7 +425,7 @@ export const drPrograms: DRProgram[] = [
   },
   {
     id: "prog-4",
-    name: "Frequency Regulation",
+    name: "grid.programs.prog-4",
     type: "ancillary",
     enrolled: false,
     maxCommitment: 100,
@@ -439,36 +439,36 @@ export const drPrograms: DRProgram[] = [
 export const automationRules: AutomationRule[] = [
   {
     id: "rule-1",
-    name: "Peak Price Response",
-    trigger: "Price > $0.15/kWh",
-    action: "Reduce HVAC by 20%, dim lights to 70%",
+    name: "grid.rules.rule-1.name",
+    trigger: "grid.rules.rule-1.trigger",
+    action: "grid.rules.rule-1.action",
     enabled: true,
     lastTriggered: new Date(Date.now() - 2 * 60 * 60 * 1000),
     executionCount: 156,
   },
   {
     id: "rule-2",
-    name: "DR Event Auto-Accept",
-    trigger: "DR signal received",
-    action: "Auto-enroll if incentive > $200",
+    name: "grid.rules.rule-2.name",
+    trigger: "grid.rules.rule-2.trigger",
+    action: "grid.rules.rule-2.action",
     enabled: true,
     lastTriggered: new Date(Date.now() - 30 * 60 * 60 * 1000),
     executionCount: 45,
   },
   {
     id: "rule-3",
-    name: "Emergency Shed",
-    trigger: "Grid emergency signal",
-    action: "Shed non-critical loads immediately",
+    name: "grid.rules.rule-3.name",
+    trigger: "grid.rules.rule-3.trigger",
+    action: "grid.rules.rule-3.action",
     enabled: true,
     lastTriggered: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
     executionCount: 3,
   },
   {
     id: "rule-4",
-    name: "Renewable Maximizer",
-    trigger: "High renewable availability",
-    action: "Shift deferrable loads to current window",
+    name: "grid.rules.rule-4.name",
+    trigger: "grid.rules.rule-4.trigger",
+    action: "grid.rules.rule-4.action",
     enabled: false,
     executionCount: 0,
   },
@@ -689,7 +689,7 @@ export interface SystemAlert {
 export const gateways: Gateway[] = [
   {
     id: "gw-1",
-    name: "Main BACnet Gateway",
+    name: "config.gateways.gw-1",
     type: "bacnet",
     status: "online",
     ip: "192.168.1.100",
@@ -700,7 +700,7 @@ export const gateways: Gateway[] = [
   },
   {
     id: "gw-2",
-    name: "Modbus RTU Gateway",
+    name: "config.gateways.gw-2",
     type: "modbus",
     status: "online",
     ip: "192.168.1.101",
@@ -711,7 +711,7 @@ export const gateways: Gateway[] = [
   },
   {
     id: "gw-3",
-    name: "MQTT Broker",
+    name: "config.gateways.gw-3",
     type: "mqtt",
     status: "online",
     ip: "192.168.1.102",
@@ -722,7 +722,7 @@ export const gateways: Gateway[] = [
   },
   {
     id: "gw-4",
-    name: "OPC-UA Server",
+    name: "config.gateways.gw-4",
     type: "opcua",
     status: "error",
     ip: "192.168.1.103",
@@ -736,7 +736,7 @@ export const gateways: Gateway[] = [
 export const devices: Device[] = [
   {
     id: "dev-1",
-    name: "AHU-1 Controller",
+    name: "config.devices.dev-1",
     gatewayId: "gw-1",
     protocol: "BACnet",
     address: "1001",
@@ -747,7 +747,7 @@ export const devices: Device[] = [
   },
   {
     id: "dev-2",
-    name: "AHU-2 Controller",
+    name: "config.devices.dev-2",
     gatewayId: "gw-1",
     protocol: "BACnet",
     address: "1002",
@@ -758,7 +758,7 @@ export const devices: Device[] = [
   },
   {
     id: "dev-3",
-    name: "VAV Box Floor 1",
+    name: "config.devices.dev-3",
     gatewayId: "gw-1",
     protocol: "BACnet",
     address: "2001",
@@ -769,7 +769,7 @@ export const devices: Device[] = [
   },
   {
     id: "dev-4",
-    name: "Chiller Plant",
+    name: "config.devices.dev-4",
     gatewayId: "gw-2",
     protocol: "Modbus",
     address: "10",
@@ -780,7 +780,7 @@ export const devices: Device[] = [
   },
   {
     id: "dev-5",
-    name: "Power Meter Main",
+    name: "config.devices.dev-5",
     gatewayId: "gw-2",
     protocol: "Modbus",
     address: "20",
@@ -791,7 +791,7 @@ export const devices: Device[] = [
   },
   {
     id: "dev-6",
-    name: "IoT Sensor Hub",
+    name: "config.devices.dev-6",
     gatewayId: "gw-3",
     protocol: "MQTT",
     address: "sensors/hub1",
@@ -802,7 +802,7 @@ export const devices: Device[] = [
   },
   {
     id: "dev-7",
-    name: "Lighting Controller",
+    name: "config.devices.dev-7",
     gatewayId: "gw-1",
     protocol: "BACnet",
     address: "3001",
@@ -813,7 +813,7 @@ export const devices: Device[] = [
   },
   {
     id: "dev-8",
-    name: "EV Charger Station",
+    name: "config.devices.dev-8",
     gatewayId: "gw-4",
     protocol: "OPC-UA",
     address: "ns=2;s=EV01",
@@ -829,7 +829,7 @@ export const systemAlerts: SystemAlert[] = [
     id: "alert-1",
     type: "connection",
     severity: "error",
-    message: "OPC-UA Server connection lost",
+    message: "config.alerts.alert-1",
     timestamp: new Date(Date.now() - 10 * 60 * 1000),
     acknowledged: false,
   },
@@ -837,7 +837,7 @@ export const systemAlerts: SystemAlert[] = [
     id: "alert-2",
     type: "data",
     severity: "warning",
-    message: "Stale data from Lighting Controller (1h)",
+    message: "config.alerts.alert-2",
     timestamp: new Date(Date.now() - 55 * 60 * 1000),
     acknowledged: false,
   },
@@ -845,7 +845,7 @@ export const systemAlerts: SystemAlert[] = [
     id: "alert-3",
     type: "performance",
     severity: "info",
-    message: "High data throughput on MQTT Broker",
+    message: "config.alerts.alert-3",
     timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000),
     acknowledged: true,
   },
@@ -853,7 +853,7 @@ export const systemAlerts: SystemAlert[] = [
     id: "alert-4",
     type: "security",
     severity: "warning",
-    message: "Failed authentication attempt from 192.168.1.200",
+    message: "config.alerts.alert-4",
     timestamp: new Date(Date.now() - 4 * 60 * 60 * 1000),
     acknowledged: true,
   },

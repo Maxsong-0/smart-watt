@@ -1,10 +1,12 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import { useTranslation } from "react-i18next"
 import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis, ReferenceLine } from "recharts"
 import { generateHourlyData, type EnergyReading } from "@/lib/mock-data"
 
 export function EnergyChart() {
+  const { t, i18n } = useTranslation()
   const [data, setData] = useState<EnergyReading[]>([])
   const [mounted, setMounted] = useState(false)
   const [animationActive, setAnimationActive] = useState(true)
@@ -40,7 +42,7 @@ export function EnergyChart() {
   if (!mounted) return <div className="h-[300px] animate-pulse bg-muted rounded-lg" />
 
   const chartData = data.map((d) => ({
-    time: d.timestamp.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" }),
+    time: d.timestamp.toLocaleTimeString(i18n.language || "en", { hour: "2-digit", minute: "2-digit" }),
     actual: d.value,
     predicted: d.predicted,
   }))
@@ -53,8 +55,8 @@ export function EnergyChart() {
     <div className="relative">
       <div className="absolute top-0 right-0 flex items-center gap-2 text-xs text-muted-foreground z-10">
         <span className="w-2 h-2 rounded-full bg-energy-green animate-pulse" />
-        <span>Live: {currentValue.toLocaleString()} kW</span>
-        <span className="text-energy-yellow">Peak: {peakValue.toLocaleString()} kW</span>
+        <span>{t('dashboard.energyChart.live')}: {currentValue.toLocaleString()} {t('common.units.kw')}</span>
+        <span className="text-energy-yellow">{t('dashboard.energyChart.peak')}: {peakValue.toLocaleString()} {t('common.units.kw')}</span>
       </div>
 
       <div className="h-[300px] w-full">
@@ -103,15 +105,15 @@ export function EnergyChart() {
               }}
               labelStyle={{ color: "var(--foreground)" }}
               formatter={(value: number, name: string) => [
-                `${value.toLocaleString()} kW`,
-                name === "actual" ? "Actual" : "Predicted",
+                `${value.toLocaleString()} ${t('common.units.kw')}`,
+                name === "actual" ? t('dashboard.energyChart.actual') : t('dashboard.energyChart.predicted'),
               ]}
             />
             <ReferenceLine
               y={1200}
               stroke="var(--energy-yellow)"
               strokeDasharray="5 5"
-              label={{ value: "Peak Threshold", fill: "var(--energy-yellow)", fontSize: 10 }}
+              label={{ value: t('dashboard.energyChart.peakThreshold'), fill: "var(--energy-yellow)", fontSize: 10 }}
             />
             <Area
               type="monotone"

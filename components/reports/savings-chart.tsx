@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import { useTranslation } from "react-i18next"
 import { Bar, CartesianGrid, ComposedChart, Line, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts"
 
 const monthlySavingsData = [
@@ -19,6 +20,7 @@ const monthlySavingsData = [
 ]
 
 export function SavingsChart() {
+  const { t } = useTranslation()
   const [mounted, setMounted] = useState(false)
   const [animationComplete, setAnimationComplete] = useState(false)
 
@@ -30,10 +32,16 @@ export function SavingsChart() {
 
   if (!mounted) return <div className="h-[300px] animate-pulse bg-muted rounded-lg" />
 
+  // Transform data to use translated month names
+  const translatedData = monthlySavingsData.map(item => ({
+    ...item,
+    month: t(`reports.savingsChart.months.${item.month}`)
+  }))
+
   return (
     <div className="h-[300px] w-full">
       <ResponsiveContainer width="100%" height="100%">
-        <ComposedChart data={monthlySavingsData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
+        <ComposedChart data={translatedData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
           <defs>
             <linearGradient id="savingsGradient" x1="0" y1="0" x2="0" y2="1">
               <stop offset="5%" stopColor="var(--chart-1)" stopOpacity={0.3} />
@@ -48,7 +56,7 @@ export function SavingsChart() {
             fontSize={11}
             tickLine={false}
             axisLine={false}
-            tickFormatter={(value) => `$${value / 1000}k`}
+            tickFormatter={(value) => `${t('common.units.currency')}${value / 1000}k`}
           />
           <YAxis
             yAxisId="right"
@@ -57,7 +65,7 @@ export function SavingsChart() {
             fontSize={11}
             tickLine={false}
             axisLine={false}
-            tickFormatter={(value) => `$${value / 1000}k`}
+            tickFormatter={(value) => `${t('common.units.currency')}${value / 1000}k`}
           />
           <Tooltip
             contentStyle={{
@@ -67,8 +75,8 @@ export function SavingsChart() {
               fontSize: "12px",
             }}
             formatter={(value: number, name: string) => [
-              value ? `$${value.toLocaleString()}` : "N/A",
-              name === "actual" ? "Actual Savings" : name === "projected" ? "Projected" : "Cumulative",
+              value ? `${t('common.units.currency')}${value.toLocaleString()}` : t('common.na'),
+              name === "actual" ? t('reports.savingsChart.actualSavings') : name === "projected" ? t('reports.savingsChart.projected') : t('reports.savingsChart.cumulative'),
             ]}
           />
           <Bar

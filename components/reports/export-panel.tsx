@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { useTranslation } from "react-i18next"
 import { FileText, FileSpreadsheet, Download, Calendar, Mail, Loader2, Check, Clock } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -18,6 +19,7 @@ import { toast } from "sonner"
 import { cn } from "@/lib/utils"
 
 export function ExportPanel() {
+  const { t } = useTranslation()
   const [selectedPeriod, setSelectedPeriod] = useState("ytd")
   const [isExporting, setIsExporting] = useState<string | null>(null)
   const [isScheduleDialogOpen, setIsScheduleDialogOpen] = useState(false)
@@ -25,35 +27,39 @@ export function ExportPanel() {
   const [scheduleFrequency, setScheduleFrequency] = useState("monthly")
   const [isScheduling, setIsScheduling] = useState(false)
 
+  const getPeriodLabel = (period: string) => {
+    return t(`reports.export.periods.${period}`)
+  }
+
   const handleExport = async (format: "pdf" | "excel" | "csv") => {
     setIsExporting(format)
-    toast.info(`Generating ${format.toUpperCase()} report...`, {
-      description: `Period: ${getPeriodLabel(selectedPeriod)}`,
+    toast.info(t('reports.export.generating', { format: format.toUpperCase() }), {
+      description: `${t('reports.export.reportPeriod')}: ${getPeriodLabel(selectedPeriod)}`,
     })
 
     await new Promise((resolve) => setTimeout(resolve, 1500))
 
     setIsExporting(null)
-    toast.success(`${format.toUpperCase()} report generated`, {
-      description: "Download will start automatically",
+    toast.success(t('reports.export.generated', { format: format.toUpperCase() }), {
+      description: t('reports.export.downloadStart'),
       action: {
-        label: "Open",
-        onClick: () => toast.info("Opening file..."),
+        label: t('reports.export.open'),
+        onClick: () => toast.info(t('reports.export.opening')),
       },
     })
   }
 
   const handleScheduleReport = async () => {
     if (!scheduleEmail) {
-      toast.error("Please enter an email address")
+      toast.error(t('reports.export.enterEmail'))
       return
     }
 
     setIsScheduling(true)
     await new Promise((resolve) => setTimeout(resolve, 1000))
 
-    toast.success("Report scheduled successfully", {
-      description: `${scheduleFrequency.charAt(0).toUpperCase() + scheduleFrequency.slice(1)} reports will be sent to ${scheduleEmail}`,
+    toast.success(t('reports.export.scheduledSuccess'), {
+      description: t('reports.export.scheduledDesc', { frequency: t(`reports.export.frequencies.${scheduleFrequency}`), email: scheduleEmail }),
     })
 
     setIsScheduling(false)
@@ -61,36 +67,21 @@ export function ExportPanel() {
     setScheduleEmail("")
   }
 
-  const getPeriodLabel = (period: string) => {
-    switch (period) {
-      case "month":
-        return "This Month"
-      case "quarter":
-        return "This Quarter"
-      case "ytd":
-        return "Year to Date"
-      case "custom":
-        return "Custom Range"
-      default:
-        return period
-    }
-  }
-
   return (
     <div className="space-y-4">
       {/* Date Range */}
       <div className="space-y-2">
-        <label className="text-sm text-muted-foreground">Report Period</label>
+        <label className="text-sm text-muted-foreground">{t('reports.export.reportPeriod')}</label>
         <Select value={selectedPeriod} onValueChange={setSelectedPeriod}>
           <SelectTrigger className="w-full">
             <Calendar className="w-4 h-4 mr-2" />
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="month">This Month</SelectItem>
-            <SelectItem value="quarter">This Quarter</SelectItem>
-            <SelectItem value="ytd">Year to Date</SelectItem>
-            <SelectItem value="custom">Custom Range</SelectItem>
+            <SelectItem value="month">{t('reports.export.periods.month')}</SelectItem>
+            <SelectItem value="quarter">{t('reports.export.periods.quarter')}</SelectItem>
+            <SelectItem value="ytd">{t('reports.export.periods.ytd')}</SelectItem>
+            <SelectItem value="custom">{t('reports.export.periods.custom')}</SelectItem>
           </SelectContent>
         </Select>
       </div>
@@ -110,7 +101,7 @@ export function ExportPanel() {
           ) : (
             <FileText className="w-4 h-4 text-energy-red" />
           )}
-          {isExporting === "pdf" ? "Generating PDF..." : "Export as PDF"}
+          {isExporting === "pdf" ? t('reports.export.generating', { format: 'PDF' }) : t('reports.export.exportPdf')}
         </Button>
         <Button
           variant="outline"
@@ -126,7 +117,7 @@ export function ExportPanel() {
           ) : (
             <FileSpreadsheet className="w-4 h-4 text-energy-green" />
           )}
-          {isExporting === "excel" ? "Generating Excel..." : "Export as Excel"}
+          {isExporting === "excel" ? t('reports.export.generating', { format: 'Excel' }) : t('reports.export.exportExcel')}
         </Button>
         <Button
           variant="outline"
@@ -142,26 +133,26 @@ export function ExportPanel() {
           ) : (
             <Download className="w-4 h-4 text-energy-cyan" />
           )}
-          {isExporting === "csv" ? "Generating CSV..." : "Download Raw Data"}
+          {isExporting === "csv" ? t('reports.export.generating', { format: 'CSV' }) : t('reports.export.downloadRaw')}
         </Button>
       </div>
 
       <div className="pt-3 border-t border-border">
         <Button className="w-full gap-2" onClick={() => setIsScheduleDialogOpen(true)}>
           <Mail className="w-4 h-4" />
-          Schedule Monthly Report
+          {t('reports.export.scheduleMonthly')}
         </Button>
       </div>
 
       <Dialog open={isScheduleDialogOpen} onOpenChange={setIsScheduleDialogOpen}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
-            <DialogTitle>Schedule Automatic Reports</DialogTitle>
-            <DialogDescription>Set up automatic report delivery to your email.</DialogDescription>
+            <DialogTitle>{t('reports.export.scheduleTitle')}</DialogTitle>
+            <DialogDescription>{t('reports.export.scheduleDesc')}</DialogDescription>
           </DialogHeader>
           <div className="space-y-4 py-4">
             <div className="space-y-2">
-              <Label htmlFor="email">Email Address</Label>
+              <Label htmlFor="email">{t('reports.export.emailAddress')}</Label>
               <Input
                 id="email"
                 type="email"
@@ -171,39 +162,38 @@ export function ExportPanel() {
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="frequency">Frequency</Label>
+              <Label htmlFor="frequency">{t('reports.export.frequency')}</Label>
               <Select value={scheduleFrequency} onValueChange={setScheduleFrequency}>
                 <SelectTrigger>
                   <Clock className="w-4 h-4 mr-2" />
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="weekly">Weekly</SelectItem>
-                  <SelectItem value="biweekly">Bi-weekly</SelectItem>
-                  <SelectItem value="monthly">Monthly</SelectItem>
-                  <SelectItem value="quarterly">Quarterly</SelectItem>
+                  <SelectItem value="weekly">{t('reports.export.frequencies.weekly')}</SelectItem>
+                  <SelectItem value="biweekly">{t('reports.export.frequencies.biweekly')}</SelectItem>
+                  <SelectItem value="monthly">{t('reports.export.frequencies.monthly')}</SelectItem>
+                  <SelectItem value="quarterly">{t('reports.export.frequencies.quarterly')}</SelectItem>
                 </SelectContent>
               </Select>
             </div>
             <div className="p-3 rounded-lg bg-secondary/50 text-xs text-muted-foreground">
-              Reports will include: Energy consumption summary, cost analysis, savings breakdown, and optimization
-              recommendations.
+              {t('reports.export.reportIncludes')}
             </div>
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setIsScheduleDialogOpen(false)}>
-              Cancel
+              {t('common.cancel')}
             </Button>
             <Button onClick={handleScheduleReport} disabled={isScheduling}>
               {isScheduling ? (
                 <>
                   <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                  Scheduling...
+                  {t('reports.export.scheduling')}
                 </>
               ) : (
                 <>
                   <Check className="w-4 h-4 mr-2" />
-                  Schedule Reports
+                  {t('reports.export.schedule')}
                 </>
               )}
             </Button>

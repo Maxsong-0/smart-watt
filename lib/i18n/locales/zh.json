@@ -8,15 +8,42 @@
     "role": "角色",
     "loading": "加载中...",
     "error": "错误",
-    "success": "成功"
+    "success": "成功",
+    "na": "暂无数据",
+    "viewDetails": "查看详情",
+    "share": "分享",
+    "departments": {
+      "facilitiesManagement": "设施运维",
+      "gridOperations": "电网运营"
+    },
+    "units": {
+      "kw": "kW",
+      "kwh": "kWh",
+      "f": "°F",
+      "c": "°C",
+      "percentage": "%",
+      "currency": "￥",
+      "tons": "吨"
+    },
+    "loadTypes": {
+      "HVAC": "暖通空调",
+      "Lighting": "照明",
+      "Equipment": "设备",
+      "IT Systems": "IT 系统",
+      "Other": "其他"
+    }
+  },
+  "languages": {
+    "en": "英文",
+    "zh": "中文"
   },
   "nav": {
     "overview": "总览",
     "predictions": "AI 预测",
     "grid": "电网交互",
-    "buildings": "建筑管理",
-    "config": "系统配置",
-    "reports": "报告",
+    "buildings": "建筑",
+    "config": "配置",
+    "reports": "报表",
     "settings": "设置"
   },
   "roles": {
@@ -24,59 +51,122 @@
     "utilityRep": "电力公司代表",
     "bob": "Bob",
     "alice": "Alice",
-    "facilityManagerDesc": "管理建筑和设备",
-    "utilityRepDesc": "监控电网和 DR 项目"
+    "facilityManagerDesc": "管理建筑与设备",
+    "utilityRepDesc": "监控电网与 DR 项目"
   },
   "theme": {
-    "light": "浅色",
-    "dark": "深色",
+    "light": "亮色",
+    "dark": "暗色",
     "system": "跟随系统"
   },
   "settings": {
     "title": "设置",
-    "subtitle": "管理您的偏好和账户设置",
+    "subtitle": "管理你的偏好与账号设置",
     "appearance": "外观",
-    "appearanceDesc": "自定义应用程序外观",
+    "appearanceDesc": "自定义界面风格",
     "language": "语言",
-    "languageDesc": "选择您的首选语言",
-    "themeDesc": "选择您的首选配色方案",
+    "languageDesc": "选择界面语言",
+    "themeDesc": "选择配色方案",
     "notifications": "通知",
-    "notificationsDesc": "配置通知偏好",
+    "notificationsDesc": "设置通知偏好",
     "profile": "个人资料",
-    "profileDesc": "更新您的个人信息",
+    "profileDesc": "更新个人信息",
     "roleDesc": "切换用户视角",
     "emailNotifications": "邮件通知",
     "emailNotificationsDesc": "通过邮件接收重要更新",
     "pushNotifications": "推送通知",
-    "pushNotificationsDesc": "浏览器推送通知",
+    "pushNotificationsDesc": "浏览器推送提醒",
     "drAlerts": "DR 事件提醒",
     "drAlertsDesc": "需求响应事件通知",
-    "systemAlerts": "系统警报",
-    "systemAlertsDesc": "系统和设备警报",
+    "systemAlerts": "系统告警",
+    "systemAlertsDesc": "系统与设备告警",
     "displayName": "显示名称",
     "email": "邮箱",
     "phone": "电话",
     "department": "部门",
-    "profileSaved": "个人资料保存成功"
+    "profileSaved": "资料已保存"
+  },
+  "header": {
+    "searchPlaceholder": "搜索…(Ctrl/Cmd+K)",
+    "live": "实时",
+    "notifications": "通知",
+    "markAllRead": "全部标记已读",
+    "noNotifications": "暂无通知",
+    "ptsPerSec": "点/秒",
+    "noResults": "未找到结果",
+    "navigateTitle": "正在跳转到 {{item}}",
+    "navigateDesc": "已选择搜索结果",
+    "search": {
+      "buildings": "建筑",
+      "equipment": "设备",
+      "pages": "页面"
+    },
+    "notificationsData": {
+      "drEvent": {
+        "title": "DR 事件即将开始",
+        "desc": "容量类 DR 事件 30 分钟后开始"
+      },
+      "highUsage": {
+        "title": "能耗过高",
+        "desc": "理科楼超出阈值"
+      },
+      "optimization": {
+        "title": "优化已执行",
+        "desc": "空调预冷完成"
+      }
+    }
   },
   "dashboard": {
     "title": "园区总览",
-    "subtitle": "实时能源监控与控制",
-    "totalLoad": "园区总负载",
+    "subtitle": "实时能耗监控与调控",
+    "totalLoad": "园区总负荷",
     "gridUtilization": "电网利用率",
     "todaysSavings": "今日节省",
-    "carbonOffset": "碳排放抵消",
+    "carbonOffset": "碳减排",
     "vsYesterday": "较昨日",
     "vsAvg": "较平均",
     "thisMonth": "本月",
-    "energyConsumption": "能源消耗",
-    "energyConsumptionDesc": "24小时趋势与AI预测",
+    "energyConsumption": "能耗曲线",
+    "energyConsumptionDesc": "24 小时趋势与 AI 预测",
     "actual": "实际",
     "predicted": "预测",
     "demandResponse": "需求响应",
     "campusMap": "园区地图",
-    "campusMapDesc": "建筑状态与负载分布",
-    "loadBreakdown": "负载分解"
+    "campusMapDesc": "建筑状态与负荷分布",
+    "campusMapUI": {
+      "overview": "园区总览 - 实时",
+      "totalLoad": "总负荷",
+      "tooltip": {
+        "load": "负荷",
+        "temperature": "温度",
+        "hvac": "暖通",
+        "status": "状态"
+      },
+      "legend": {
+        "title": "状态",
+        "normal": "正常",
+        "warning": "预警",
+        "critical": "严重",
+        "drActive": "DR 激活"
+      }
+    },
+    "loadBreakdown": "负荷占比",
+    "drStatus": {
+      "activeEvent": "进行中的 DR 事件",
+      "pending": "待开始",
+      "completed": "已完成",
+      "reductionProgress": "减载进度",
+      "eventProgress": "事件进度",
+      "upcomingEvents": "即将开始的事件",
+      "event": "事件"
+    },
+    "energyChart": {
+      "live": "实时",
+      "peak": "峰值",
+      "actual": "实际",
+      "predicted": "预测",
+      "peakThreshold": "峰值阈值"
+    }
   },
   "auth": {
     "login": "登录",
@@ -86,48 +176,584 @@
     "password": "密码",
     "confirmPassword": "确认密码",
     "name": "姓名",
-    "namePlaceholder": "请输入您的姓名",
+    "namePlaceholder": "请输入姓名",
     "rememberMe": "记住我",
     "welcomeBack": "欢迎回来",
-    "loginSubtitle": "登录您的账户以继续",
-    "createAccount": "创建账户",
-    "registerSubtitle": "开始使用 Smart Watt",
+    "loginSubtitle": "登录以继续使用",
+    "createAccount": "创建账号",
+    "registerSubtitle": "开始体验 Smart Watt",
     "orQuickDemo": "或快速体验",
-    "noAccount": "还没有账户？",
-    "hasAccount": "已有账户？",
+    "noAccount": "还没有账号？",
+    "hasAccount": "已有账号？",
     "loggingIn": "登录中...",
     "registering": "注册中...",
     "loginFailed": "登录失败",
     "registerFailed": "注册失败",
     "passwordMismatch": "两次输入的密码不一致",
-    "passwordTooShort": "密码长度至少为4个字符",
-    "selectRole": "选择您的角色",
-    "guest": "访客"
+    "passwordTooShort": "密码至少 4 个字符",
+    "selectRole": "选择你的角色",
+    "guest": "访客",
+    "brandTagline": "智能能源管理平台",
+    "brandDescription": "AI 驱动的校园能源与电网互动平台，优化用能、降低成本、助力可持续。",
+    "copyright": "© 2024 Smart Watt. 保留所有权利。"
   },
   "errors": {
-    "forbidden": "访问被拒绝",
-    "forbiddenDesc": "您没有权限访问此页面。如果您认为这是一个错误，请联系管理员。",
+    "forbidden": "拒绝访问",
+    "forbiddenDesc": "你没有访问该页面的权限。如有疑问请联系管理员。",
     "goHome": "返回首页",
     "goBack": "返回上一页"
   },
   "buildings": {
-    "title": "建筑管理",
-    "subtitle": "监控和控制各个建筑"
+    "title": "建筑",
+    "subtitle": "监测并控制单体建筑",
+    "card": {
+      "status": {
+        "normal": "正常",
+        "warning": "预警",
+        "critical": "严重",
+        "dr-active": "DR 激活"
+      },
+      "load": "负荷",
+      "hvac": "暖通",
+      "viewDetails": "查看详情"
+    },
+    "types": {
+      "academic": "教学科研",
+      "residential": "宿舍",
+      "admin": "行政",
+      "sports": "体育",
+      "library": "图书馆"
+    },
+    "names": {
+      "eng-1": "工程馆",
+      "sci-1": "理科中心",
+      "lib-1": "主图书馆",
+      "res-1": "北区宿舍",
+      "res-2": "南区宿舍",
+      "admin-1": "行政楼",
+      "gym-1": "体育综合馆"
+    }
+  },
+  "status": {
+    "on": "开启",
+    "off": "关闭",
+    "eco": "节能",
+    "online": "在线",
+    "offline": "离线",
+    "active": "启用",
+    "inactive": "未启用",
+    "error": "错误",
+    "running": "运行中",
+    "idle": "空闲",
+    "maintenance": "维护中",
+    "fault": "故障"
   },
   "grid": {
     "title": "电网交互",
-    "subtitle": "需求响应与电力公司协调"
+    "subtitle": "需求响应与电力协调",
+    "stats": {
+      "activeEvent": "进行中的 DR 事件",
+      "capacityConstraint": "容量约束",
+      "currentPrice": "当前电价",
+      "priceChange": "高于均值",
+      "ytdRevenue": "年度至今回报",
+      "vsLastYear": "较去年",
+      "automation": "自动化已启用",
+      "automationDesc": "条规则",
+      "todayTriggers": "今日触发 2 次"
+    },
+    "sections": {
+      "signalsTitle": "电网信号",
+      "signalsDesc": "实时电力公司通知",
+      "priceTitle": "电价曲线",
+      "priceDesc": "24 小时价格历史与预测",
+      "priceLegendCurrent": "当前价格",
+      "priceLegendAverage": "平均值",
+      "programsTitle": "需求响应项目",
+      "programsDesc": "已报名项目与表现",
+      "revenueTitle": "收益概览",
+      "revenueDesc": "DR 项目收益",
+      "automationTitle": "自动化规则",
+      "automationDesc": "自动响应配置"
+    },
+    "price": {
+      "avgLabel": "均值",
+      "tooltipLabel": "当前价格",
+      "averageLine": "平均值"
+    },
+    "programCard": {
+      "programLabel": "项目",
+      "enrolled": "已报名",
+      "notEnrolled": "未报名",
+      "commitment": "承诺量",
+      "ytdRevenue": "年度收益",
+      "events": "事件数",
+      "performance": "履约率"
+    },
+    "ui": {
+      "receiving": "接收电网信号中...",
+      "allHandled": "全部信号已处理",
+      "responded": "已响应",
+      "respond": "响应",
+      "dismiss": "忽略",
+      "signalDetails": "信号详情",
+      "recommendedActions": "推荐措施",
+      "executeResponse": "执行响应",
+      "initiating": "正在发起响应...",
+      "initiatingDesc": "针对 {{type}} 信号执行预案",
+      "responseSuccess": "响应执行成功",
+      "responseSuccessDesc": "已完成 {{type}} 信号的自动化",
+      "dismissed": "信号已忽略",
+      "timeRemaining": "剩余时间",
+      "expired": "已过期",
+      "remaining": "剩余",
+      "priceMultiplier": "价格倍数",
+      "signalType": "{{type}} 信号",
+      "severityLabel": "严重级别"
+    },
+    "signals": {
+      "sig-1": "高电价时段即将开始",
+      "sig-2": "可利用的高额光伏出力",
+      "sig-3": "电网容量受限 - 触发 DR 事件"
+    },
+    "programs": {
+      "prog-1": "削峰需求响应",
+      "prog-2": "紧急减载",
+      "prog-3": "实时电价",
+      "prog-4": "调频辅助服务"
+    },
+    "types": {
+      "price": "价格",
+      "emergency": "紧急",
+      "capacity": "容量",
+      "renewable": "可再生"
+    },
+    "severity": {
+      "info": "提示",
+      "warning": "预警",
+      "critical": "严重"
+    },
+    "actions": {
+      "price": {
+        "1": "减少非必要负荷",
+        "2": "推迟可灵活作业",
+        "3": "条件允许时提前预冷/预热"
+      },
+      "emergency": {
+        "1": "立即减载非关键负荷",
+        "2": "启动紧急预案",
+        "3": "通知设施经理"
+      },
+      "capacity": {
+        "1": "参与需求响应",
+        "2": "下调暖通设定值",
+        "3": "转移可柔性负荷"
+      },
+      "renewable": {
+        "1": "尽量提高消纳",
+        "2": "充电储能",
+        "3": "运行可延迟负荷"
+      }
+    },
+    "rules": {
+      "rule-1": {
+        "name": "高价响应",
+        "trigger": "电价 > $0.15/kWh",
+        "action": "暖通降 20%，照明调至 70%"
+      },
+      "rule-2": {
+        "name": "DR 自动接受",
+        "trigger": "收到 DR 信号",
+        "action": "激励超过 $200 自动报名"
+      },
+      "rule-3": {
+        "name": "紧急减载",
+        "trigger": "电网紧急信号",
+        "action": "立即切除非关键负荷"
+      },
+      "rule-4": {
+        "name": "绿能优先",
+        "trigger": "可再生出力充足",
+        "action": "将可延迟负荷转移至当前时段"
+      }
+    },
+    "revenue": {
+      "programsEnrolled": "已报名项目数",
+      "ytd": "年度收益",
+      "estimator": "收益测算",
+      "commitmentLabel": "承诺量 (kW)",
+      "eventsLabel": "预计事件/年",
+      "projectedAnnual": "预计年收益",
+      "projectedFootnote": "基于历史项目数据"
+    },
+    "automation": {
+      "addRule": "新增自动化规则",
+      "editRule": "编辑自动化规则",
+      "newRule": "新建自动化规则",
+      "descriptionEdit": "修改规则设置。",
+      "descriptionNew": "创建针对电网事件的自动响应。",
+      "ruleName": "规则名称",
+      "trigger": "触发条件",
+      "action": "执行动作",
+      "last": "最近：",
+      "executions": "次执行",
+      "never": "从未",
+      "ruleActivated": "规则已启用",
+      "ruleDeactivated": "规则已停用",
+      "ruleDeleted": "规则已删除",
+      "fillRequired": "请填写完整",
+      "saving": "保存中...",
+      "update": "更新",
+      "create": "创建",
+      "triggers": {
+        "DR_SIGNAL_RECEIVED": "收到 DR 信号",
+        "PRICE_ABOVE_THRESHOLD": "价格高于阈值",
+        "PEAK_DEMAND_ALERT": "峰值预警",
+        "SCHEDULE_TIME": "定时触发",
+        "GRID_EMERGENCY": "电网紧急"
+      }
+    }
   },
   "predictions": {
     "title": "AI 预测中心",
-    "subtitle": "机器学习驱动的能源预测"
+    "subtitle": "机器学习驱动的能耗预测",
+    "suggestions": {
+      "opt-1": {
+        "title": "高峰前预冷理科中心",
+        "desc": "6 点而非 8 点开始制冷，把负荷转移到低谷时段。"
+      },
+      "opt-2": {
+        "title": "空置区域降低照明",
+        "desc": "传感器显示主图书馆 40% 区域空置，调光至 30%。"
+      },
+      "opt-3": {
+        "title": "将充电移至夜间",
+        "desc": "当前电动车充电与峰时重合，改为夜间可每天节省约 $180。"
+      },
+      "opt-4": {
+        "title": "优化体育馆暖通时程",
+        "desc": "依据热惰性提前 2 小时回温，减少闭馆前能耗。"
+      }
+    },
+    "ui": {
+      "analyzing": "AI 正在分析 {{count}} 条优化机会",
+      "savings": "节省：",
+      "confidence": "可信度：",
+      "apply": "应用",
+      "applying": "应用中...",
+      "generateMore": "生成更多建议",
+      "generating": "生成中...",
+      "perDay": "/天"
+    },
+    "priority": {
+      "high": "高",
+      "medium": "中",
+      "low": "低"
+    },
+    "sections": {
+      "optimizationsTitle": "AI 优化建议",
+      "optimizationsDesc": "智能降本推荐"
+    },
+    "stats": {
+      "accuracy": "预测准确率",
+      "vsLastWeek": "较上周",
+      "peakForecast": "峰值预测",
+      "todayWindow": "今日 14:00-16:00",
+      "potentialSavings": "潜在节省",
+      "ifOptimized": "优化后",
+      "activeModels": "在用模型",
+      "primaryModel": "主模型 LSTM"
+    },
+    "chart": {
+      "title": "24 小时负荷预测",
+      "description": "历史数据与 AI 预测（含置信区间）",
+      "legendActual": "实际",
+      "legendPredicted": "预测",
+      "legendCI": "95% 区间",
+      "now": "现在",
+      "modelBadge": "LSTM 模型",
+      "peak": "峰值"
+    },
+    "weekly": {
+      "title": "一周预测",
+      "description": "每日能耗预测",
+      "lastWeek": "上周",
+      "predicted": "预测"
+    },
+    "models": {
+      "title": "模型表现",
+      "description": "在用预测模型",
+      "active": "激活",
+      "mape": "MAPE",
+      "accuracy": "准确率",
+      "trained": "训练时间",
+      "justNow": "刚刚",
+      "hoursAgo": "{{count}} 小时前",
+      "daysAgo": "{{count}} 天前"
+    },
+    "weekdays": {
+      "Mon": "周一",
+      "Tue": "周二",
+      "Wed": "周三",
+      "Thu": "周四",
+      "Fri": "周五",
+      "Sat": "周六",
+      "Sun": "周日"
+    }
   },
   "config": {
     "title": "系统配置",
-    "subtitle": "网关管理与协议映射"
+    "subtitle": "网关管理与协议映射",
+    "stats": {
+      "gatewaysOnline": "在线网关",
+      "activeDevices": "在用设备",
+      "dataPoints": "数据点数",
+      "changeLabel": "较上周",
+      "activeAlerts": "活跃告警"
+    },
+    "sections": {
+      "gatewaysTitle": "网关",
+      "gatewaysDesc": "协议接口",
+      "devicesTitle": "已注册设备",
+      "devicesDesc": "已连接的设备与传感器",
+      "mappingTitle": "协议映射",
+      "mappingDesc": "点位名称归一化",
+      "alertsTitle": "系统告警",
+      "alertsDesc": "连接与数据问题"
+    },
+    "gateways": {
+      "gw-1": "主 BACnet 网关",
+      "gw-2": "Modbus RTU 网关",
+      "gw-3": "MQTT Broker",
+      "gw-4": "OPC-UA 服务器"
+    },
+    "devices": {
+      "dev-1": "AHU-1 控制器",
+      "dev-2": "AHU-2 控制器",
+      "dev-3": "一层 VAV 箱",
+      "dev-4": "冷机房",
+      "dev-5": "总进线电表",
+      "dev-6": "IoT 传感器集线器",
+      "dev-7": "照明控制器",
+      "dev-8": "充电桩"
+    },
+    "deviceTable": {
+      "searchPlaceholder": "搜索设备...",
+      "all": "全部",
+      "headers": {
+        "device": "设备",
+        "gateway": "网关",
+        "address": "地址",
+        "points": "点位",
+        "lastReading": "最近读取",
+        "status": "状态"
+      },
+      "status": {
+        "active": "在线",
+        "inactive": "离线",
+        "error": "故障"
+      },
+      "showing": "显示 {{count}} / {{total}} 台设备",
+      "addDevice": "新增设备",
+      "addNewDevice": "添加新设备",
+      "addNewDeviceDesc": "将新设备注册到监控系统。",
+      "deviceName": "设备名称",
+      "deviceType": "设备类型",
+      "selectType": "选择类型",
+      "selectGateway": "选择网关",
+      "deviceAddress": "设备地址",
+      "dataPoints": "数据点",
+      "adding": "添加中...",
+      "deviceDetails": "设备详情",
+      "deactivate": "停用设备",
+      "activate": "启用设备",
+      "remove": "删除设备",
+      "messages": {
+        "fillRequired": "请填写所有必填项",
+        "added": "设备添加成功",
+        "removed": "设备已删除",
+        "deactivated": "设备已停用",
+        "activated": "设备已启用"
+      },
+      "types": {
+        "AHU": "空气处理机 (AHU)",
+        "VAV": "可变风量箱 (VAV)",
+        "Chiller": "冷机",
+        "Boiler": "锅炉",
+        "Meter": "电表",
+        "Sensor": "传感器"
+      }
+    },
+    "alerts": {
+      "alert-1": "OPC-UA 连接丢失",
+      "alert-2": "照明控制器数据陈旧 (1h)",
+      "alert-3": "MQTT Broker 吞吐异常",
+      "alert-4": "来自 192.168.1.200 的认证失败"
+    },
+    "ui": {
+      "online": "在线",
+      "offline": "离线",
+      "error": "错误",
+      "ago": "{{time}} 前",
+      "s": "秒",
+      "m": "分",
+      "h": "小时",
+      "configure": "配置",
+      "restart": "重启",
+      "restarting": "重启中...",
+      "shutdown": "关停",
+      "start": "启动",
+      "remove": "删除",
+      "addGateway": "新增网关",
+      "modifyGatewayDesc": "修改网关配置。",
+      "addGatewayDesc": "将新网关加入网络。",
+      "gatewayName": "网关名称",
+      "protocol": "协议",
+      "ipAddress": "IP 地址",
+      "port": "端口",
+      "devices": "设备",
+      "dataPoints": "数据点",
+      "lastSeen": "上次在线",
+      "update": "更新",
+      "add": "添加",
+      "saving": "保存中...",
+      "unknown": "未知"
+    },
+    "systemAlerts": {
+      "unacknowledged": "{{count}} 条未确认告警",
+      "unacknowledgedPlural": "{{count}} 条未确认告警",
+      "acknowledgeAll": "全部确认",
+      "acknowledge": "确认",
+      "dismiss": "忽略",
+      "empty": "暂无告警",
+      "types": {
+        "connection": "连接",
+        "data": "数据",
+        "security": "安全",
+        "performance": "性能"
+      }
+    },
+    "protocolMapping": {
+      "title": "协议映射",
+      "add": "添加点位映射",
+      "edit": "编辑映射",
+      "new": "新建映射",
+      "sourceProtocol": "协议",
+      "sourcePoint": "源点位",
+      "targetName": "目标名称",
+      "unit": "单位",
+      "transform": "转换公式 (可选)",
+      "save": "保存映射",
+      "saving": "保存中...",
+      "update": "更新",
+      "delete": "映射已删除",
+      "added": "映射已添加",
+      "required": "请填写必填项"
+    }
   },
   "reports": {
-    "title": "报告与分析",
-    "subtitle": "ROI分析与节能报告"
+    "title": "报表与分析",
+    "subtitle": "ROI 分析与节省报告",
+    "savingsChart": {
+      "actualSavings": "实际节省",
+      "projected": "预测",
+      "cumulative": "累计",
+      "months": {
+        "Jan": "1月",
+        "Feb": "2月",
+        "Mar": "3月",
+        "Apr": "4月",
+        "May": "5月",
+        "Jun": "6月",
+        "Jul": "7月",
+        "Aug": "8月",
+        "Sep": "9月",
+        "Oct": "10月",
+        "Nov": "11月",
+        "Dec": "12月"
+      }
+    },
+    "stats": {
+      "totalSavingsYTD": "年初至今节省",
+      "energyReduction": "能耗降低",
+      "carbonOffset": "碳减排",
+      "paybackPeriod": "回收期",
+      "vsLastYear": "较去年",
+      "vsBaseline": "较基线",
+      "co2eAvoided": "避免的 CO2e",
+      "roi": "投资回报"
+    },
+    "sections": {
+      "monthlySavingsTrend": "月度节省趋势",
+      "monthlySavingsTrendDesc": "能耗成本随时间变化",
+      "roiCalculator": "ROI 计算器",
+      "roiCalculatorDesc": "投资回报分析",
+      "monthlyEnergyComparison": "月度能耗对比",
+      "monthlyEnergyComparisonDesc": "今年 vs 基线",
+      "carbonImpact": "碳影响",
+      "carbonImpactDesc": "环保指标",
+      "exportReports": "导出报告",
+      "exportReportsDesc": "下载数据与报告"
+    },
+    "roi": {
+      "initialInvestment": "初始投资",
+      "annualSavings": "年度节省",
+      "paybackPeriod": "回收期",
+      "roi5Year": "5 年 ROI",
+      "npv5Year": "5 年 NPV",
+      "total5YearSavings": "5 年总节省",
+      "years": "年"
+    },
+    "carbon": {
+      "annualGoal": "年度碳目标",
+      "goalProgress": "目标 {{total}} 吨，已完成 {{current}}",
+      "co2Avoided": "避免排放",
+      "treesEquivalent": "折合植树",
+      "carsOffRoad": "减少车辆",
+      "cleanEnergy": "清洁能源占比",
+      "treesPerYear": "棵/年",
+      "vehicles": "辆"
+    },
+    "export": {
+      "reportPeriod": "报告周期",
+      "periods": {
+        "month": "本月",
+        "quarter": "本季度",
+        "ytd": "年初至今",
+        "custom": "自定义区间"
+      },
+      "exportPdf": "导出 PDF",
+      "exportExcel": "导出 Excel",
+      "downloadRaw": "下载原始数据",
+      "generating": "正在生成 {{format}}...",
+      "generated": "{{format}} 报告已生成",
+      "downloadStart": "下载将自动开始",
+      "open": "打开",
+      "opening": "正在打开文件...",
+      "scheduleMonthly": "定期推送报告",
+      "scheduleTitle": "安排自动发送",
+      "scheduleDesc": "设置定期将报告发送到邮箱。",
+      "emailAddress": "邮箱地址",
+      "frequency": "频率",
+      "frequencies": {
+        "weekly": "每周",
+        "biweekly": "每两周",
+        "monthly": "每月",
+        "quarterly": "每季度"
+      },
+      "reportIncludes": "报告包含：能耗摘要、成本分析、节省拆解与优化建议。",
+      "schedule": "安排发送",
+      "scheduling": "安排中...",
+      "enterEmail": "请输入邮箱地址",
+      "scheduledSuccess": "已成功安排",
+      "scheduledDesc": "{{frequency}} 报告将发送至 {{email}}"
+    },
+    "comparison": {
+      "baseline": "基线年份",
+      "current": "本年",
+      "averageBaseline": "平均基线",
+      "tooltipBaseline": "基线",
+      "tooltipCurrent": "当前"
+    }
   }
 }

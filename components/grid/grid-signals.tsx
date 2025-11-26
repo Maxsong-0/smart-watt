@@ -2,6 +2,7 @@
 
 import type React from "react"
 import { useState, useEffect } from "react"
+import { useTranslation } from "react-i18next"
 import { gridSignals, type GridSignal } from "@/lib/mock-data"
 import { cn } from "@/lib/utils"
 import { Badge } from "@/components/ui/badge"
@@ -46,6 +47,7 @@ const severityStyles: Record<GridSignal["severity"], { bg: string; border: strin
 }
 
 export function GridSignals() {
+  const { t } = useTranslation()
   const [signals, setSignals] = useState<GridSignal[]>([])
   const [mounted, setMounted] = useState(false)
   const [, setTick] = useState(0)
@@ -67,19 +69,19 @@ export function GridSignals() {
 
   const getTimeRemaining = (expiresAt: Date) => {
     const diff = expiresAt.getTime() - Date.now()
-    if (diff <= 0) return "Expired"
+    if (diff <= 0) return t('grid.ui.expired')
     const hours = Math.floor(diff / (1000 * 60 * 60))
     const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60))
-    if (hours > 0) return `${hours}h ${minutes}m remaining`
-    return `${minutes}m remaining`
+    if (hours > 0) return `${hours}h ${minutes}m ${t('grid.ui.remaining')}`
+    return `${minutes}m ${t('grid.ui.remaining')}`
   }
 
   const handleRespond = async (signal: GridSignal) => {
     setSelectedSignal(null)
     setRespondingId(signal.id)
 
-    toast.info("Initiating response...", {
-      description: `${signal.type} signal response in progress`,
+    toast.info(t('grid.ui.initiating'), {
+      description: t('grid.ui.initiatingDesc', { type: t(`grid.types.${signal.type}`) }),
     })
 
     await new Promise((resolve) => setTimeout(resolve, 2000))
@@ -87,16 +89,16 @@ export function GridSignals() {
     setRespondedIds((prev) => new Set([...prev, signal.id]))
     setRespondingId(null)
 
-    toast.success("Response executed successfully", {
-      description: `Automated actions for ${signal.type} signal completed`,
+    toast.success(t('grid.ui.responseSuccess'), {
+      description: t('grid.ui.responseSuccessDesc', { type: t(`grid.types.${signal.type}`) }),
     })
   }
 
   const handleDismiss = (signal: GridSignal) => {
     setSelectedSignal(null)
     setDismissedIds((prev) => new Set([...prev, signal.id]))
-    toast.info("Signal dismissed", {
-      description: signal.message,
+    toast.info(t('grid.ui.dismissed'), {
+      description: t(signal.message),
     })
   }
 
@@ -115,13 +117,13 @@ export function GridSignals() {
     <div className="space-y-3">
       <div className="flex items-center gap-2 text-xs text-muted-foreground mb-2">
         <Radio className="w-3 h-3 text-energy-cyan animate-pulse" />
-        <span>Receiving grid signals...</span>
+        <span>{t('grid.ui.receiving')}</span>
       </div>
 
       {visibleSignals.length === 0 ? (
         <div className="text-center py-8 text-muted-foreground">
           <Check className="w-8 h-8 mx-auto mb-2 text-energy-green" />
-          <p className="text-sm">All signals handled</p>
+          <p className="text-sm">{t('grid.ui.allHandled')}</p>
         </div>
       ) : (
         visibleSignals.map((signal, index) => {
@@ -169,10 +171,12 @@ export function GridSignals() {
                 <div className="flex-1">
                   <div className="flex items-center justify-between mb-1">
                     <div className="flex items-center gap-2">
-                      <span className="font-medium text-sm capitalize">{signal.type} Signal</span>
+                      <span className="font-medium text-sm capitalize">
+                        {t('grid.ui.signalType', { type: t(`grid.types.${signal.type}`) })}
+                      </span>
                       {hasResponded ? (
                         <Badge className="bg-energy-green/10 text-energy-green border-energy-green/30 text-xs">
-                          Responded
+                          {t('grid.ui.responded')}
                         </Badge>
                       ) : (
                         <Badge
@@ -184,18 +188,18 @@ export function GridSignals() {
                             signal.severity === "info" && "border-energy-cyan text-energy-cyan",
                           )}
                         >
-                          {signal.severity}
+                          {t(`grid.severity.${signal.severity}`)}
                         </Badge>
                       )}
                     </div>
                     {signal.priceMultiplier && (
                       <Badge className="bg-energy-red text-primary-foreground font-mono animate-pulse">
-                        {signal.priceMultiplier}x Price
+                        {signal.priceMultiplier}x {t('grid.ui.priceMultiplier')}
                       </Badge>
                     )}
                   </div>
 
-                  <p className="text-sm text-muted-foreground mb-2">{signal.message}</p>
+                  <p className="text-sm text-muted-foreground mb-2">{t(signal.message)}</p>
 
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
@@ -212,7 +216,7 @@ export function GridSignals() {
                           onClick={() => handleRespond(signal)}
                         >
                           <Play className="w-3 h-3 mr-1" />
-                          Respond
+                          {t('grid.ui.respond')}
                         </Button>
                         <Button variant="ghost" size="sm" className="h-6 text-xs" onClick={() => handleDismiss(signal)}>
                           <X className="w-3 h-3" />
@@ -229,58 +233,39 @@ export function GridSignals() {
 
       <Dialog open={!!selectedSignal} onOpenChange={() => setSelectedSignal(null)}>
         <DialogContent className="sm:max-w-md">
-          <DialogHeader>
-            <DialogTitle className="capitalize">{selectedSignal?.type} Signal Details</DialogTitle>
-            <DialogDescription>{selectedSignal?.message}</DialogDescription>
-          </DialogHeader>
-          {selectedSignal && (
-            <div className="space-y-4 py-4">
-              <div className="grid grid-cols-2 gap-4 text-sm">
-                <div>
-                  <p className="text-muted-foreground">Severity</p>
-                  <p className="font-medium capitalize">{selectedSignal.severity}</p>
-                </div>
-                <div>
-                  <p className="text-muted-foreground">Time Remaining</p>
-                  <p className="font-medium font-mono">{getTimeRemaining(selectedSignal.expiresAt)}</p>
-                </div>
-                {selectedSignal.priceMultiplier && (
-                  <div>
-                    <p className="text-muted-foreground">Price Multiplier</p>
-                    <p className="font-medium text-energy-red">{selectedSignal.priceMultiplier}x</p>
-                  </div>
-                )}
+                  <DialogHeader>
+                    <DialogTitle className="capitalize">
+                      {t('grid.ui.signalType', { type: t(`grid.types.${selectedSignal?.type}`) })} {t('grid.ui.signalDetails')}
+                    </DialogTitle>
+                    <DialogDescription>{selectedSignal && t(selectedSignal.message)}</DialogDescription>
+                  </DialogHeader>
+                  {selectedSignal && (
+                    <div className="space-y-4 py-4">
+                      <div className="grid grid-cols-2 gap-4 text-sm">
+                        <div>
+                          <p className="text-muted-foreground">{t('grid.ui.severityLabel')}</p>
+                          <p className="font-medium capitalize">{t(`grid.severity.${selectedSignal.severity}`)}</p>
+                        </div>
+                        <div>
+                          <p className="text-muted-foreground">{t('grid.ui.timeRemaining')}</p>
+                          <p className="font-medium font-mono">{getTimeRemaining(selectedSignal.expiresAt)}</p>
+                        </div>
+                        {selectedSignal.priceMultiplier && (
+                          <div>
+                            <p className="text-muted-foreground">{t('grid.ui.priceMultiplier')}</p>
+                            <p className="font-medium text-energy-red">{selectedSignal.priceMultiplier}x</p>
+                          </div>
+                        )}
               </div>
 
               <div className="p-3 rounded-lg bg-secondary/50 text-xs text-muted-foreground">
-                <p className="font-medium text-foreground mb-1">Recommended Actions:</p>
+                <p className="font-medium text-foreground mb-1">{t('grid.ui.recommendedActions')}:</p>
                 <ul className="list-disc list-inside space-y-1">
-                  {selectedSignal.type === "price" && (
+                  {selectedSignal.type && (
                     <>
-                      <li>Reduce non-essential loads</li>
-                      <li>Delay flexible operations</li>
-                      <li>Pre-cool/pre-heat if possible</li>
-                    </>
-                  )}
-                  {selectedSignal.type === "emergency" && (
-                    <>
-                      <li>Immediate load reduction required</li>
-                      <li>Activate emergency protocols</li>
-                      <li>Notify facility managers</li>
-                    </>
-                  )}
-                  {selectedSignal.type === "capacity" && (
-                    <>
-                      <li>Participate in demand response</li>
-                      <li>Reduce HVAC setpoints</li>
-                      <li>Shift flexible loads</li>
-                    </>
-                  )}
-                  {selectedSignal.type === "renewable" && (
-                    <>
-                      <li>Increase consumption if possible</li>
-                      <li>Charge batteries</li>
-                      <li>Run deferrable loads</li>
+                      <li>{t(`grid.actions.${selectedSignal.type}.1`)}</li>
+                      <li>{t(`grid.actions.${selectedSignal.type}.2`)}</li>
+                      <li>{t(`grid.actions.${selectedSignal.type}.3`)}</li>
                     </>
                   )}
                 </ul>
@@ -289,15 +274,15 @@ export function GridSignals() {
           )}
           <DialogFooter>
             <Button variant="outline" onClick={() => setSelectedSignal(null)}>
-              Cancel
+              {t('common.cancel')}
             </Button>
             <Button variant="outline" onClick={() => selectedSignal && handleDismiss(selectedSignal)}>
               <X className="w-4 h-4 mr-2" />
-              Dismiss
+              {t('grid.ui.dismiss')}
             </Button>
             <Button onClick={() => selectedSignal && handleRespond(selectedSignal)}>
               <Play className="w-4 h-4 mr-2" />
-              Execute Response
+              {t('grid.ui.executeResponse')}
             </Button>
           </DialogFooter>
         </DialogContent>

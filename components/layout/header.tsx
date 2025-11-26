@@ -1,12 +1,14 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { Bell, Search, RefreshCw, Activity, X, Check, Trash2, Menu } from "lucide-react"
+import { useTranslation } from "react-i18next"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
 import { cn } from "@/lib/utils"
 import { useMobileNav } from "@/lib/mobile-nav-context"
+import { LanguageSwitcher } from "@/components/settings/language-switcher"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -39,51 +41,73 @@ interface Notification {
   type: "alert" | "info" | "success"
 }
 
-const initialNotifications: Notification[] = [
-  {
-    id: "1",
-    title: "DR Event Starting",
-    description: "Capacity DR event begins in 30 minutes",
-    time: new Date(Date.now() - 1000 * 60 * 5),
-    read: false,
-    type: "alert",
-  },
-  {
-    id: "2",
-    title: "High Energy Usage",
-    description: "Science Building exceeded threshold",
-    time: new Date(Date.now() - 1000 * 60 * 30),
-    read: false,
-    type: "alert",
-  },
-  {
-    id: "3",
-    title: "Optimization Applied",
-    description: "HVAC pre-cooling completed successfully",
-    time: new Date(Date.now() - 1000 * 60 * 60),
-    read: true,
-    type: "success",
-  },
-]
-
-const searchItems = [
-  {
-    category: "Buildings",
-    items: ["Engineering Hall", "Science Building", "Library", "Student Center", "Admin Building"],
-  },
-  { category: "Equipment", items: ["AHU-1", "Chiller-Main", "Boiler-1", "VAV-201", "Meter-Main"] },
-  {
-    category: "Pages",
-    items: ["Dashboard", "Predictions", "Grid Interaction", "Buildings", "Configuration", "Reports"],
-  },
-]
-
 export function Header({ title, subtitle }: HeaderProps) {
+  const { t, i18n } = useTranslation()
   const [isRefreshing, setIsRefreshing] = useState(false)
   const [currentTime, setCurrentTime] = useState<string>("")
   const [dataRate, setDataRate] = useState(0)
-  const [notifications, setNotifications] = useState<Notification[]>(initialNotifications)
+  const notificationTemplates = useMemo(
+    () => [
+      {
+        id: "1",
+        title: t("header.notificationsData.drEvent.title"),
+        description: t("header.notificationsData.drEvent.desc"),
+        time: new Date(Date.now() - 1000 * 60 * 5),
+        read: false,
+        type: "alert" as const,
+      },
+      {
+        id: "2",
+        title: t("header.notificationsData.highUsage.title"),
+        description: t("header.notificationsData.highUsage.desc"),
+        time: new Date(Date.now() - 1000 * 60 * 30),
+        read: false,
+        type: "alert" as const,
+      },
+      {
+        id: "3",
+        title: t("header.notificationsData.optimization.title"),
+        description: t("header.notificationsData.optimization.desc"),
+        time: new Date(Date.now() - 1000 * 60 * 60),
+        read: true,
+        type: "success" as const,
+      },
+    ],
+    [t],
+  )
+  const [notifications, setNotifications] = useState<Notification[]>(notificationTemplates)
+
+  useEffect(() => {
+    // Refresh notification text when language changes while preserving state flags
+    setNotifications((prev) =>
+      prev.map((n) => {
+        const template = notificationTemplates.find((tpl) => tpl.id === n.id)
+        return template ? { ...n, title: template.title, description: template.description } : n
+      }),
+    )
+  }, [notificationTemplates])
   const [isSearchOpen, setIsSearchOpen] = useState(false)
+
+  const searchItems = [
+    {
+      category: t("header.search.buildings"),
+      items: [
+        t("buildings.names.eng-1"),
+        t("buildings.names.sci-1"),
+        t("buildings.names.lib-1"),
+        t("buildings.names.res-1"),
+        t("buildings.names.admin-1"),
+      ],
+    },
+    {
+      category: t("header.search.equipment"),
+      items: ["AHU-1", "Chiller-Main", "Boiler-1", "VAV-201", "Meter-Main"],
+    },
+    {
+      category: t("header.search.pages"),
+      items: [t("nav.overview"), t("nav.predictions"), t("nav.grid"), t("nav.buildings"), t("nav.config"), t("nav.reports")],
+    },
+  ]
 
   // Mobile nav - wrapped in try-catch for when used outside provider
   let mobileNav: { toggle: () => void } | null = null
@@ -96,7 +120,7 @@ export function Header({ title, subtitle }: HeaderProps) {
   useEffect(() => {
     const updateTime = () => {
       setCurrentTime(
-        new Date().toLocaleTimeString("en-US", {
+        new Date().toLocaleTimeString(i18n.language || "en", {
           hour: "2-digit",
           minute: "2-digit",
           second: "2-digit",
@@ -127,11 +151,11 @@ export function Header({ title, subtitle }: HeaderProps) {
 
   const handleRefresh = () => {
     setIsRefreshing(true)
-    toast.info("Refreshing data...")
+    toast.info(t('common.loading'))
     setTimeout(() => {
       setIsRefreshing(false)
       setDataRate(Math.round(1200 + Math.random() * 400))
-      toast.success("Data refreshed successfully")
+      toast.success(t('common.success'))
     }, 1000)
   }
 
@@ -143,7 +167,7 @@ export function Header({ title, subtitle }: HeaderProps) {
 
   const markAllAsRead = () => {
     setNotifications((prev) => prev.map((n) => ({ ...n, read: true })))
-    toast.success("All notifications marked as read")
+    toast.success(t('common.success'))
   }
 
   const deleteNotification = (id: string) => {
@@ -152,22 +176,22 @@ export function Header({ title, subtitle }: HeaderProps) {
 
   const clearAllNotifications = () => {
     setNotifications([])
-    toast.success("All notifications cleared")
+    toast.success(t('common.success'))
   }
 
   const formatNotificationTime = (date: Date) => {
     const diff = Date.now() - date.getTime()
     const minutes = Math.floor(diff / (60 * 1000))
-    if (minutes < 60) return `${minutes}m ago`
+    if (minutes < 60) return t('config.ui.ago', { time: `${minutes}${t('config.ui.m')}` })
     const hours = Math.floor(minutes / 60)
-    if (hours < 24) return `${hours}h ago`
-    return `${Math.floor(hours / 24)}d ago`
+    if (hours < 24) return t('config.ui.ago', { time: `${hours}${t('config.ui.h')}` })
+    return t('config.ui.ago', { time: `${Math.floor(hours / 24)}d` }) // 'd' might need translation key if we want to be strict
   }
 
   const handleSearchSelect = (item: string) => {
     setIsSearchOpen(false)
-    toast.info(`Navigating to ${item}`, {
-      description: "Search result selected",
+    toast.info(t('header.navigateTitle', { item }), {
+      description: t('header.navigateDesc'),
     })
   }
 
@@ -196,7 +220,7 @@ export function Header({ title, subtitle }: HeaderProps) {
         <div className="relative hidden md:block">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
           <Input
-            placeholder="Search... (⌘K)"
+            placeholder={t('header.searchPlaceholder')}
             className="w-64 pl-9 bg-secondary border-border cursor-pointer"
             readOnly
             onClick={() => setIsSearchOpen(true)}
@@ -205,7 +229,7 @@ export function Header({ title, subtitle }: HeaderProps) {
 
         <div className="hidden lg:flex items-center gap-2 px-3 py-1.5 rounded-full bg-secondary/50 border border-border">
           <Activity className="w-3 h-3 text-energy-cyan animate-pulse" />
-          <span className="text-xs font-mono text-muted-foreground">{dataRate} pts/s</span>
+          <span className="text-xs font-mono text-muted-foreground">{dataRate} {t('header.ptsPerSec')}</span>
         </div>
 
         {/* Live indicator with time */}
@@ -215,7 +239,7 @@ export function Header({ title, subtitle }: HeaderProps) {
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-energy-green opacity-75"></span>
               <span className="relative inline-flex rounded-full h-2 w-2 bg-energy-green"></span>
             </span>
-            <span className="text-xs font-medium text-energy-green">Live</span>
+            <span className="text-xs font-medium text-energy-green">{t('header.live')}</span>
           </div>
           <span className="text-xs font-mono text-muted-foreground">{currentTime}</span>
         </div>
@@ -238,12 +262,12 @@ export function Header({ title, subtitle }: HeaderProps) {
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-80">
             <DropdownMenuLabel className="flex items-center justify-between">
-              <span>Notifications</span>
+              <span>{t('header.notifications')}</span>
               {notifications.length > 0 && (
                 <div className="flex gap-1">
                   <Button variant="ghost" size="sm" className="h-6 text-xs" onClick={markAllAsRead}>
                     <Check className="w-3 h-3 mr-1" />
-                    Mark all read
+                    {t('header.markAllRead')}
                   </Button>
                   <Button
                     variant="ghost"
@@ -258,7 +282,7 @@ export function Header({ title, subtitle }: HeaderProps) {
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             {notifications.length === 0 ? (
-              <div className="py-6 text-center text-sm text-muted-foreground">No notifications</div>
+              <div className="py-6 text-center text-sm text-muted-foreground">{t('header.noNotifications')}</div>
             ) : (
               notifications.map((notification) => (
                 <DropdownMenuItem
@@ -300,12 +324,14 @@ export function Header({ title, subtitle }: HeaderProps) {
             )}
           </DropdownMenuContent>
         </DropdownMenu>
+
+        <LanguageSwitcher className="hidden md:flex w-32" />
       </div>
 
       <CommandDialog open={isSearchOpen} onOpenChange={setIsSearchOpen}>
-        <CommandInput placeholder="Search buildings, equipment, pages..." />
+        <CommandInput placeholder={t('header.searchPlaceholder')} />
         <CommandList>
-          <CommandEmpty>No results found.</CommandEmpty>
+          <CommandEmpty>{t('header.noResults')}</CommandEmpty>
           {searchItems.map((group) => (
             <CommandGroup key={group.category} heading={group.category}>
               {group.items.map((item) => (

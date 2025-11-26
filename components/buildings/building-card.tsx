@@ -2,11 +2,12 @@
 
 import { useState, useEffect } from "react"
 import Link from "next/link"
+import { useTranslation } from "react-i18next"
 import type { Building } from "@/lib/mock-data"
 import { cn } from "@/lib/utils"
 import { Progress } from "@/components/ui/progress"
 import { Badge } from "@/components/ui/badge"
-import { Building2, Thermometer, Wind, ChevronRight, Zap } from "lucide-react"
+import { Building2, Thermometer, Wind, ChevronRight, Zap, ChevronUp, ChevronDown } from "lucide-react"
 
 interface BuildingCardProps {
   building: Building
@@ -14,6 +15,7 @@ interface BuildingCardProps {
 }
 
 export function BuildingCard({ building, index = 0 }: BuildingCardProps) {
+  const { t } = useTranslation()
   const [mounted, setMounted] = useState(false)
   const [liveLoad, setLiveLoad] = useState(building.currentLoad)
   const [loadTrend, setLoadTrend] = useState<"up" | "down" | "stable">("stable")
@@ -45,19 +47,6 @@ export function BuildingCard({ building, index = 0 }: BuildingCardProps) {
         return "bg-energy-red"
       case "dr-active":
         return "bg-energy-cyan"
-    }
-  }
-
-  const getStatusLabel = (status: Building["status"]) => {
-    switch (status) {
-      case "normal":
-        return "Normal"
-      case "warning":
-        return "Warning"
-      case "critical":
-        return "Critical"
-      case "dr-active":
-        return "DR Active"
     }
   }
 
@@ -101,8 +90,8 @@ export function BuildingCard({ building, index = 0 }: BuildingCardProps) {
             />
           </div>
           <div>
-            <h3 className="font-semibold text-sm group-hover:text-primary transition-colors">{building.name}</h3>
-            <p className="text-xs text-muted-foreground capitalize">{building.type}</p>
+            <h3 className="font-semibold text-sm group-hover:text-primary transition-colors">{t(building.name)}</h3>
+            <p className="text-xs text-muted-foreground capitalize">{t(`buildings.types.${building.type}`)}</p>
           </div>
         </div>
         <Badge
@@ -115,7 +104,7 @@ export function BuildingCard({ building, index = 0 }: BuildingCardProps) {
             building.status === "dr-active" && "border-energy-cyan/50 text-energy-cyan animate-pulse",
           )}
         >
-          {getStatusLabel(building.status)}
+          {t(`buildings.card.status.${building.status}`)}
         </Badge>
       </div>
 
@@ -124,7 +113,7 @@ export function BuildingCard({ building, index = 0 }: BuildingCardProps) {
           <div className="flex items-center justify-between text-xs mb-1">
             <span className="text-muted-foreground flex items-center gap-1">
               <Zap className="w-3 h-3" />
-              Load
+              {t("buildings.card.load")}
             </span>
             <span
               className={cn(
@@ -133,9 +122,9 @@ export function BuildingCard({ building, index = 0 }: BuildingCardProps) {
                 loadTrend === "down" && "text-energy-green",
               )}
             >
-              {Math.round(liveLoad)} / {building.maxCapacity} kW
-              {loadTrend === "up" && <span className="text-energy-yellow">↑</span>}
-              {loadTrend === "down" && <span className="text-energy-green">↓</span>}
+              {Math.round(liveLoad)} / {building.maxCapacity} {t("common.units.kw")}
+              {loadTrend === "up" && <ChevronUp className="w-3 h-3 text-energy-yellow" />}
+              {loadTrend === "down" && <ChevronDown className="w-3 h-3 text-energy-green" />}
             </span>
           </div>
           <Progress
@@ -151,17 +140,22 @@ export function BuildingCard({ building, index = 0 }: BuildingCardProps) {
         <div className="flex items-center justify-between text-xs">
           <div className="flex items-center gap-1.5">
             <Thermometer className="w-3 h-3 text-muted-foreground" />
-            <span className="font-mono">{building.temperature}°F</span>
+            <span className="font-mono">
+              {building.temperature}
+              {t("common.units.f")}
+            </span>
           </div>
           <div className="flex items-center gap-1.5">
             <Wind className={cn("w-3 h-3", hvacStatusColors[building.hvacStatus])} />
-            <span className={hvacStatusColors[building.hvacStatus]}>HVAC {building.hvacStatus.toUpperCase()}</span>
+            <span className={hvacStatusColors[building.hvacStatus]}>
+              {t("buildings.card.hvac")} {t(`status.${building.hvacStatus}`)}
+            </span>
           </div>
         </div>
       </div>
 
       <div className="flex items-center justify-end mt-3 text-xs text-muted-foreground group-hover:text-primary transition-colors">
-        <span>View Details</span>
+        <span>{t("buildings.card.viewDetails")}</span>
         <ChevronRight className="w-3 h-3 ml-1 transform group-hover:translate-x-1 transition-transform" />
       </div>
     </Link>

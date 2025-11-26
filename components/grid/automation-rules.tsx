@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { useTranslation } from "react-i18next"
 import { automationRules, type AutomationRule } from "@/lib/mock-data"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
@@ -20,6 +21,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { toast } from "sonner"
 
 export function AutomationRules() {
+  const { t } = useTranslation()
   const [rules, setRules] = useState<AutomationRule[]>(automationRules)
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [editingRule, setEditingRule] = useState<AutomationRule | null>(null)
@@ -35,8 +37,8 @@ export function AutomationRules() {
       prev.map((r) => {
         if (r.id === id) {
           const newEnabled = !r.enabled
-          toast.success(newEnabled ? "Rule activated" : "Rule deactivated", {
-            description: r.name,
+          toast.success(newEnabled ? t("grid.automation.ruleActivated") : t("grid.automation.ruleDeactivated"), {
+            description: t(r.name),
           })
           return { ...r, enabled: newEnabled }
         }
@@ -47,7 +49,7 @@ export function AutomationRules() {
 
   const handleSaveRule = async () => {
     if (!newRule.name || !newRule.action) {
-      toast.error("Please fill in all fields")
+      toast.error(t("grid.automation.fillRequired"))
       return
     }
 
@@ -60,7 +62,7 @@ export function AutomationRules() {
           r.id === editingRule.id ? { ...r, name: newRule.name, trigger: newRule.trigger, action: newRule.action } : r,
         ),
       )
-      toast.success("Rule updated successfully")
+      toast.success(t("common.success"))
     } else {
       const rule: AutomationRule = {
         id: `rule-${Date.now()}`,
@@ -72,7 +74,7 @@ export function AutomationRules() {
         lastTriggered: undefined,
       }
       setRules((prev) => [...prev, rule])
-      toast.success("Rule created successfully", {
+      toast.success(t("common.success"), {
         description: newRule.name,
       })
     }
@@ -96,19 +98,19 @@ export function AutomationRules() {
   const handleDeleteRule = (id: string) => {
     const rule = rules.find((r) => r.id === id)
     setRules((prev) => prev.filter((r) => r.id !== id))
-    toast.success("Rule deleted", {
-      description: rule?.name,
+    toast.success(t("grid.automation.ruleDeleted"), {
+      description: rule ? t(rule.name) : "",
     })
   }
 
   const formatTime = (date?: Date) => {
-    if (!date) return "Never"
+    if (!date) return t("grid.automation.never")
     const diff = Date.now() - date.getTime()
     const hours = Math.floor(diff / (1000 * 60 * 60))
     const days = Math.floor(hours / 24)
-    if (days > 0) return `${days}d ago`
-    if (hours > 0) return `${hours}h ago`
-    return "Just now"
+    if (days > 0) return t("config.ui.ago", { time: `${days}d` })
+    if (hours > 0) return t("config.ui.ago", { time: `${hours}${t("config.ui.h")}` })
+    return t("predictions.models.justNow")
   }
 
   return (
@@ -128,7 +130,7 @@ export function AutomationRules() {
               <div className={cn("p-1.5 rounded", rule.enabled ? "bg-energy-green/10" : "bg-muted")}>
                 <Play className={cn("w-3 h-3", rule.enabled ? "text-energy-green" : "text-muted-foreground")} />
               </div>
-              <span className="font-medium text-sm">{rule.name}</span>
+              <span className="font-medium text-sm">{t(rule.name)}</span>
             </div>
             <div className="flex items-center gap-2">
               <div className="opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1">
@@ -150,23 +152,25 @@ export function AutomationRules() {
 
           <div className="space-y-1.5 text-xs mb-3">
             <div className="flex items-start gap-2">
-              <span className="text-muted-foreground w-14">Trigger:</span>
-              <span className="text-foreground font-mono bg-secondary/50 px-1.5 py-0.5 rounded">{rule.trigger}</span>
+              <span className="text-muted-foreground w-14">{t("grid.automation.trigger")}:</span>
+              <span className="text-foreground font-mono bg-secondary/50 px-1.5 py-0.5 rounded">
+                {t(`grid.automation.triggers.${rule.trigger}`, { defaultValue: t(rule.trigger) })}
+              </span>
             </div>
             <div className="flex items-start gap-2">
-              <span className="text-muted-foreground w-14">Action:</span>
-              <span className="text-foreground">{rule.action}</span>
+              <span className="text-muted-foreground w-14">{t("grid.automation.action")}:</span>
+              <span className="text-foreground">{t(rule.action)}</span>
             </div>
           </div>
 
           <div className="flex items-center gap-4 text-xs text-muted-foreground">
             <div className="flex items-center gap-1">
               <Clock className="w-3 h-3" />
-              <span>Last: {formatTime(rule.lastTriggered)}</span>
+              <span>{t("grid.automation.last")} {formatTime(rule.lastTriggered)}</span>
             </div>
             <div className="flex items-center gap-1">
               <Hash className="w-3 h-3" />
-              <span>{rule.executionCount} executions</span>
+              <span>{rule.executionCount} {t("grid.automation.executions")}</span>
             </div>
           </div>
         </div>
@@ -183,31 +187,29 @@ export function AutomationRules() {
         }}
       >
         <Plus className="w-4 h-4 mr-2" />
-        Add Automation Rule
+        {t("grid.automation.addRule")}
       </Button>
 
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
-            <DialogTitle>{editingRule ? "Edit Automation Rule" : "New Automation Rule"}</DialogTitle>
+            <DialogTitle>{editingRule ? t("grid.automation.editRule") : t("grid.automation.newRule")}</DialogTitle>
             <DialogDescription>
-              {editingRule
-                ? "Modify the automation rule settings."
-                : "Create a new automation rule to respond to grid events."}
+              {editingRule ? t("grid.automation.descriptionEdit") : t("grid.automation.descriptionNew")}
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4 py-4">
             <div className="space-y-2">
-              <Label htmlFor="rule-name">Rule Name</Label>
+              <Label htmlFor="rule-name">{t("grid.automation.ruleName")}</Label>
               <Input
                 id="rule-name"
-                placeholder="e.g., Peak Demand Response"
+                placeholder={t("grid.rules.rule-1.name")}
                 value={newRule.name}
                 onChange={(e) => setNewRule((prev) => ({ ...prev, name: e.target.value }))}
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="trigger">Trigger Event</Label>
+              <Label htmlFor="trigger">{t("grid.automation.trigger")}</Label>
               <Select
                 value={newRule.trigger}
                 onValueChange={(value) => setNewRule((prev) => ({ ...prev, trigger: value }))}
@@ -216,19 +218,19 @@ export function AutomationRules() {
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="DR_SIGNAL_RECEIVED">DR Signal Received</SelectItem>
-                  <SelectItem value="PRICE_ABOVE_THRESHOLD">Price Above Threshold</SelectItem>
-                  <SelectItem value="PEAK_DEMAND_ALERT">Peak Demand Alert</SelectItem>
-                  <SelectItem value="SCHEDULE_TIME">Scheduled Time</SelectItem>
-                  <SelectItem value="GRID_EMERGENCY">Grid Emergency</SelectItem>
+                  <SelectItem value="DR_SIGNAL_RECEIVED">{t("grid.automation.triggers.DR_SIGNAL_RECEIVED")}</SelectItem>
+                  <SelectItem value="PRICE_ABOVE_THRESHOLD">{t("grid.automation.triggers.PRICE_ABOVE_THRESHOLD")}</SelectItem>
+                  <SelectItem value="PEAK_DEMAND_ALERT">{t("grid.automation.triggers.PEAK_DEMAND_ALERT")}</SelectItem>
+                  <SelectItem value="SCHEDULE_TIME">{t("grid.automation.triggers.SCHEDULE_TIME")}</SelectItem>
+                  <SelectItem value="GRID_EMERGENCY">{t("grid.automation.triggers.GRID_EMERGENCY")}</SelectItem>
                 </SelectContent>
               </Select>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="action">Action</Label>
+              <Label htmlFor="action">{t("grid.automation.action")}</Label>
               <Input
                 id="action"
-                placeholder="e.g., Reduce HVAC by 20% across all buildings"
+                placeholder={t("grid.rules.rule-1.action")}
                 value={newRule.action}
                 onChange={(e) => setNewRule((prev) => ({ ...prev, action: e.target.value }))}
               />
@@ -236,18 +238,18 @@ export function AutomationRules() {
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setIsDialogOpen(false)}>
-              Cancel
+              {t("common.cancel")}
             </Button>
             <Button onClick={handleSaveRule} disabled={isSaving}>
               {isSaving ? (
                 <>
                   <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                  Saving...
+                  {t("grid.automation.saving")}
                 </>
               ) : (
                 <>
                   <Check className="w-4 h-4 mr-2" />
-                  {editingRule ? "Update" : "Create"}
+                  {editingRule ? t("grid.automation.update") : t("grid.automation.create")}
                 </>
               )}
             </Button>

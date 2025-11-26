@@ -24,7 +24,7 @@ export function ProfileSettings() {
     displayName: isBob ? 'Bob Smith' : 'Alice Johnson',
     email: isBob ? 'bob@smartwatt.com' : 'alice@utility.com',
     phone: '+1 (555) 123-4567',
-    department: isBob ? 'Facilities Management' : 'Grid Operations'
+    department: isBob ? t('common.departments.facilitiesManagement') : t('common.departments.gridOperations')
   })
 
   const [profile, setProfile] = useState<UserProfile>(getDefaultProfile())
@@ -36,7 +36,8 @@ export function ProfileSettings() {
     } else {
       setProfile(getDefaultProfile())
     }
-  }, [role, isBob])
+    // Re-run this effect when role or t changes to ensure default profile is translated
+  }, [role, isBob, t])
 
   const handleSave = () => {
     localStorage.setItem(`smartwatt-profile-${role}`, JSON.stringify(profile))

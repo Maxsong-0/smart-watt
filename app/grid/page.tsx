@@ -26,34 +26,34 @@ export default function GridPage() {
           {/* Stats Row */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             <StatCard
-              title="Active DR Event"
+              title={t('grid.stats.activeEvent')}
               value="1"
-              changeLabel="Capacity constraint"
+              changeLabel={t('grid.stats.capacityConstraint')}
               variant="warning"
               icon={<Zap className="w-5 h-5" />}
             />
             <StatCard
-              title="Current Grid Price"
-              value="$0.142"
+              title={t('grid.stats.currentPrice')}
+              value={`${t('common.units.currency')}0.142`}
               unit="/kWh"
               change={18}
-              changeLabel="above avg"
+              changeLabel={t('grid.stats.priceChange')}
               variant="warning"
               icon={<DollarSign className="w-5 h-5" />}
             />
             <StatCard
-              title="YTD DR Revenue"
-              value="$26,330"
+              title={t('grid.stats.ytdRevenue')}
+              value={`${t('common.units.currency')}26,330`}
               change={24}
-              changeLabel="vs last year"
+              changeLabel={t('grid.stats.vsLastYear')}
               variant="success"
               icon={<Activity className="w-5 h-5" />}
             />
             <StatCard
-              title="Automation Active"
+              title={t('grid.stats.automation')}
               value="3"
-              unit="rules"
-              changeLabel="2 triggered today"
+              unit={t('grid.stats.automationDesc')}
+              changeLabel={t('grid.stats.todayTriggers')}
               icon={<Shield className="w-5 h-5" />}
             />
           </div>
@@ -63,8 +63,8 @@ export default function GridPage() {
             {/* Grid Signals */}
             <div className="rounded-lg border border-border bg-card p-4">
               <div className="mb-4">
-                <h3 className="font-semibold">Grid Signals</h3>
-                <p className="text-sm text-muted-foreground">Real-time utility communications</p>
+                <h3 className="font-semibold">{t('grid.sections.signalsTitle')}</h3>
+                <p className="text-sm text-muted-foreground">{t('grid.sections.signalsDesc')}</p>
               </div>
               <GridSignals />
             </div>
@@ -72,18 +72,18 @@ export default function GridPage() {
             {/* Price Chart */}
             <div className="lg:col-span-2 rounded-lg border border-border bg-card p-4">
               <div className="mb-4">
-                <h3 className="font-semibold">Electricity Price</h3>
-                <p className="text-sm text-muted-foreground">24-hour price history and forecast</p>
+                <h3 className="font-semibold">{t('grid.sections.priceTitle')}</h3>
+                <p className="text-sm text-muted-foreground">{t('grid.sections.priceDesc')}</p>
               </div>
               <PriceChart />
               <div className="flex items-center justify-center gap-4 mt-3 text-xs">
                 <div className="flex items-center gap-1.5">
                   <div className="w-3 h-0.5 bg-chart-3 rounded" />
-                  <span className="text-muted-foreground">Current Price</span>
+                  <span className="text-muted-foreground">{t('grid.sections.priceLegendCurrent')}</span>
                 </div>
                 <div className="flex items-center gap-1.5">
                   <div className="w-3 h-0.5 bg-energy-yellow rounded" style={{ borderStyle: "dashed" }} />
-                  <span className="text-muted-foreground">Average</span>
+                  <span className="text-muted-foreground">{t('grid.sections.priceLegendAverage')}</span>
                 </div>
               </div>
             </div>
@@ -94,8 +94,8 @@ export default function GridPage() {
             {/* DR Programs */}
             <div className="lg:col-span-2 rounded-lg border border-border bg-card p-4">
               <div className="mb-4">
-                <h3 className="font-semibold">Demand Response Programs</h3>
-                <p className="text-sm text-muted-foreground">Enrolled programs and performance</p>
+                <h3 className="font-semibold">{t('grid.sections.programsTitle')}</h3>
+                <p className="text-sm text-muted-foreground">{t('grid.sections.programsDesc')}</p>
               </div>
               <DRPrograms />
             </div>
@@ -105,8 +105,8 @@ export default function GridPage() {
               {/* Revenue Calculator */}
               <div className="rounded-lg border border-border bg-card p-4">
                 <div className="mb-4">
-                  <h3 className="font-semibold">Revenue Summary</h3>
-                  <p className="text-sm text-muted-foreground">DR program earnings</p>
+                  <h3 className="font-semibold">{t('grid.sections.revenueTitle')}</h3>
+                  <p className="text-sm text-muted-foreground">{t('grid.sections.revenueDesc')}</p>
                 </div>
                 <RevenueCalculator />
               </div>
@@ -114,8 +114,8 @@ export default function GridPage() {
               {/* Automation Rules */}
               <div className="rounded-lg border border-border bg-card p-4">
                 <div className="mb-4">
-                  <h3 className="font-semibold">Automation Rules</h3>
-                  <p className="text-sm text-muted-foreground">Auto-response configuration</p>
+                  <h3 className="font-semibold">{t('grid.sections.automationTitle')}</h3>
+                  <p className="text-sm text-muted-foreground">{t('grid.sections.automationDesc')}</p>
                 </div>
                 <AutomationRules />
               </div>

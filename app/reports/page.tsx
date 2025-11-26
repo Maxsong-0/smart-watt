@@ -26,35 +26,35 @@ export default function ReportsPage() {
           {/* Stats Row */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             <StatCard
-              title="Total Savings (YTD)"
-              value="$87,450"
+              title={t('reports.stats.totalSavingsYTD')}
+              value={t('common.units.currency') + "87,450"}
               change={18.5}
-              changeLabel="vs last year"
+              changeLabel={t('reports.stats.vsLastYear')}
               variant="success"
               icon={<DollarSign className="w-5 h-5" />}
             />
             <StatCard
-              title="Energy Reduction"
+              title={t('reports.stats.energyReduction')}
               value="23.4"
-              unit="%"
+              unit={t('common.units.percentage')}
               change={5.2}
-              changeLabel="vs baseline"
+              changeLabel={t('reports.stats.vsBaseline')}
               variant="success"
               icon={<TrendingDown className="w-5 h-5" />}
             />
             <StatCard
-              title="Carbon Offset"
+              title={t('reports.stats.carbonOffset')}
               value="124.8"
-              unit="tons"
+              unit={t('common.units.tons')}
               change={32}
-              changeLabel="CO2e avoided"
+              changeLabel={t('reports.stats.co2eAvoided')}
               icon={<Leaf className="w-5 h-5" />}
             />
             <StatCard
-              title="Payback Period"
+              title={t('reports.stats.paybackPeriod')}
               value="2.3"
-              unit="years"
-              changeLabel="ROI 43%"
+              unit={t('reports.roi.years')}
+              changeLabel={`${t('reports.stats.roi')} 43%`}
               icon={<Calendar className="w-5 h-5" />}
             />
           </div>
@@ -65,17 +65,17 @@ export default function ReportsPage() {
             <div className="lg:col-span-2 rounded-lg border border-border bg-card p-4">
               <div className="flex items-center justify-between mb-4">
                 <div>
-                  <h3 className="font-semibold">Monthly Savings Trend</h3>
-                  <p className="text-sm text-muted-foreground">Energy cost savings over time</p>
+                  <h3 className="font-semibold">{t('reports.sections.monthlySavingsTrend')}</h3>
+                  <p className="text-sm text-muted-foreground">{t('reports.sections.monthlySavingsTrendDesc')}</p>
                 </div>
                 <div className="flex items-center gap-4 text-xs">
                   <div className="flex items-center gap-1.5">
                     <div className="w-3 h-3 bg-chart-1 rounded" />
-                    <span className="text-muted-foreground">Actual Savings</span>
+                    <span className="text-muted-foreground">{t('reports.savingsChart.actualSavings')}</span>
                   </div>
                   <div className="flex items-center gap-1.5">
                     <div className="w-3 h-3 bg-chart-2 rounded" />
-                    <span className="text-muted-foreground">Projected</span>
+                    <span className="text-muted-foreground">{t('reports.savingsChart.projected')}</span>
                   </div>
                 </div>
               </div>
@@ -85,8 +85,8 @@ export default function ReportsPage() {
             {/* ROI Calculator */}
             <div className="rounded-lg border border-border bg-card p-4">
               <div className="mb-4">
-                <h3 className="font-semibold">ROI Calculator</h3>
-                <p className="text-sm text-muted-foreground">Investment return analysis</p>
+                <h3 className="font-semibold">{t('reports.sections.roiCalculator')}</h3>
+                <p className="text-sm text-muted-foreground">{t('reports.sections.roiCalculatorDesc')}</p>
               </div>
               <ROICalculator />
             </div>
@@ -97,8 +97,8 @@ export default function ReportsPage() {
             {/* Monthly Comparison */}
             <div className="lg:col-span-2 rounded-lg border border-border bg-card p-4">
               <div className="mb-4">
-                <h3 className="font-semibold">Monthly Energy Comparison</h3>
-                <p className="text-sm text-muted-foreground">This year vs baseline</p>
+                <h3 className="font-semibold">{t('reports.sections.monthlyEnergyComparison')}</h3>
+                <p className="text-sm text-muted-foreground">{t('reports.sections.monthlyEnergyComparisonDesc')}</p>
               </div>
               <MonthlyComparison />
             </div>
@@ -108,8 +108,8 @@ export default function ReportsPage() {
               {/* Carbon Metrics */}
               <div className="rounded-lg border border-border bg-card p-4">
                 <div className="mb-4">
-                  <h3 className="font-semibold">Carbon Impact</h3>
-                  <p className="text-sm text-muted-foreground">Environmental metrics</p>
+                  <h3 className="font-semibold">{t('reports.sections.carbonImpact')}</h3>
+                  <p className="text-sm text-muted-foreground">{t('reports.sections.carbonImpactDesc')}</p>
                 </div>
                 <CarbonMetrics />
               </div>
@@ -117,8 +117,8 @@ export default function ReportsPage() {
               {/* Export Panel */}
               <div className="rounded-lg border border-border bg-card p-4">
                 <div className="mb-4">
-                  <h3 className="font-semibold">Export Reports</h3>
-                  <p className="text-sm text-muted-foreground">Download data and reports</p>
+                  <h3 className="font-semibold">{t('reports.sections.exportReports')}</h3>
+                  <p className="text-sm text-muted-foreground">{t('reports.sections.exportReportsDesc')}</p>
                 </div>
                 <ExportPanel />
               </div>

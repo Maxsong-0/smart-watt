@@ -25,54 +25,54 @@ export default function PredictionsPage() {
           {/* Stats Row */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             <StatCard
-              title="Prediction Accuracy"
+              title={t('predictions.stats.accuracy')}
               value="96.8"
-              unit="%"
+              unit={t('common.units.percentage')}
               change={1.2}
-              changeLabel="vs last week"
+              changeLabel={t('predictions.stats.vsLastWeek')}
               variant="success"
               icon={<Target className="w-5 h-5" />}
             />
             <StatCard
-              title="Peak Forecast"
+              title={t('predictions.stats.peakForecast')}
               value="1,456"
-              unit="kW"
-              changeLabel="Today 2-4 PM"
+              unit={t('common.units.kw')}
+              changeLabel={t('predictions.stats.todayWindow')}
               icon={<Zap className="w-5 h-5" />}
             />
             <StatCard
-              title="Potential Savings"
-              value="$730"
-              unit="/day"
+              title={t('predictions.stats.potentialSavings')}
+              value={`${t('common.units.currency')}730`}
+              unit={t('predictions.ui.perDay')}
               change={15}
-              changeLabel="if optimized"
+              changeLabel={t('predictions.stats.ifOptimized')}
               variant="success"
               icon={<TrendingDown className="w-5 h-5" />}
             />
-            <StatCard title="Active Models" value="3" changeLabel="LSTM primary" icon={<Brain className="w-5 h-5" />} />
+            <StatCard title={t('predictions.stats.activeModels')} value="3" changeLabel={t('predictions.stats.primaryModel')} icon={<Brain className="w-5 h-5" />} />
           </div>
 
           {/* Main Prediction Chart */}
           <div className="rounded-lg border border-border bg-card p-4">
             <div className="flex items-center justify-between mb-4">
               <div>
-                <h3 className="font-semibold">24-Hour Load Forecast</h3>
+                <h3 className="font-semibold">{t('predictions.chart.title')}</h3>
                 <p className="text-sm text-muted-foreground">
-                  Historical data and AI predictions with confidence intervals
+                  {t('predictions.chart.description')}
                 </p>
               </div>
               <div className="flex items-center gap-4 text-xs">
                 <div className="flex items-center gap-1.5">
                   <div className="w-3 h-0.5 bg-chart-2 rounded" />
-                  <span className="text-muted-foreground">Actual</span>
+                  <span className="text-muted-foreground">{t('predictions.chart.legendActual')}</span>
                 </div>
                 <div className="flex items-center gap-1.5">
                   <div className="w-3 h-0.5 bg-chart-1 rounded" />
-                  <span className="text-muted-foreground">Predicted</span>
+                  <span className="text-muted-foreground">{t('predictions.chart.legendPredicted')}</span>
                 </div>
                 <div className="flex items-center gap-1.5">
                   <div className="w-6 h-3 bg-chart-1/20 rounded" />
-                  <span className="text-muted-foreground">95% CI</span>
+                  <span className="text-muted-foreground">{t('predictions.chart.legendCI')}</span>
                 </div>
               </div>
             </div>
@@ -84,18 +84,18 @@ export default function PredictionsPage() {
             {/* Weekly Forecast */}
             <div className="rounded-lg border border-border bg-card p-4">
               <div className="mb-4">
-                <h3 className="font-semibold">Weekly Forecast</h3>
-                <p className="text-sm text-muted-foreground">Daily consumption prediction</p>
+                <h3 className="font-semibold">{t('predictions.weekly.title')}</h3>
+                <p className="text-sm text-muted-foreground">{t('predictions.weekly.description')}</p>
               </div>
               <WeeklyForecast />
               <div className="flex items-center justify-center gap-4 mt-3 text-xs">
                 <div className="flex items-center gap-1.5">
                   <div className="w-3 h-3 bg-muted rounded" />
-                  <span className="text-muted-foreground">Last Week</span>
+                  <span className="text-muted-foreground">{t('predictions.weekly.lastWeek')}</span>
                 </div>
                 <div className="flex items-center gap-1.5">
                   <div className="w-3 h-3 bg-chart-1 rounded" />
-                  <span className="text-muted-foreground">Predicted</span>
+                  <span className="text-muted-foreground">{t('predictions.weekly.predicted')}</span>
                 </div>
               </div>
             </div>
@@ -103,8 +103,8 @@ export default function PredictionsPage() {
             {/* AI Optimization Suggestions */}
             <div className="rounded-lg border border-border bg-card p-4">
               <div className="mb-4">
-                <h3 className="font-semibold">AI Optimization Suggestions</h3>
-                <p className="text-sm text-muted-foreground">Smart recommendations to reduce costs</p>
+                <h3 className="font-semibold">{t('predictions.sections.optimizationsTitle')}</h3>
+                <p className="text-sm text-muted-foreground">{t('predictions.sections.optimizationsDesc')}</p>
               </div>
               <OptimizationSuggestions />
             </div>
@@ -112,8 +112,8 @@ export default function PredictionsPage() {
             {/* Model Performance */}
             <div className="rounded-lg border border-border bg-card p-4">
               <div className="mb-4">
-                <h3 className="font-semibold">Model Performance</h3>
-                <p className="text-sm text-muted-foreground">Active prediction models</p>
+                <h3 className="font-semibold">{t('predictions.models.title')}</h3>
+                <p className="text-sm text-muted-foreground">{t('predictions.models.description')}</p>
               </div>
               <ModelMetrics />
             </div>

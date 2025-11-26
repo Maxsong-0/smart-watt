@@ -50,6 +50,8 @@ export function MobileSidebar() {
   const pathname = usePathname()
   const { t } = useTranslation()
 
+  if (!user) return null
+
   const filteredNavItems = navItems.filter((item) => item.roles.includes(role))
 
   const handleNavClick = () => {

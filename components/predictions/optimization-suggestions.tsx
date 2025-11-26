@@ -2,6 +2,7 @@
 
 import type React from "react"
 import { useState, useEffect } from "react"
+import { useTranslation } from "react-i18next"
 import { optimizationSuggestions, type OptimizationSuggestion } from "@/lib/mock-data"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
@@ -33,6 +34,7 @@ const priorityStyles: Record<OptimizationSuggestion["priority"], string> = {
 }
 
 export function OptimizationSuggestions() {
+  const { t } = useTranslation()
   const [appliedIds, setAppliedIds] = useState<Set<string>>(new Set())
   const [applyingId, setApplyingId] = useState<string | null>(null)
   const [mounted, setMounted] = useState(false)
@@ -69,7 +71,7 @@ export function OptimizationSuggestions() {
     <div className="space-y-3">
       <div className="flex items-center gap-2 text-xs text-muted-foreground pb-2 border-b border-border">
         <Brain className="w-3 h-3 text-energy-cyan animate-pulse" />
-        <span>AI analyzing {optimizationSuggestions.length} optimization opportunities</span>
+        <span>{t('predictions.ui.analyzing', { count: optimizationSuggestions.length })}</span>
       </div>
 
       {optimizationSuggestions.map((suggestion, index) => {
@@ -106,26 +108,26 @@ export function OptimizationSuggestions() {
 
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 mb-1">
-                  <h4 className="font-medium text-sm truncate">{suggestion.title}</h4>
+                  <h4 className="font-medium text-sm truncate">{t(suggestion.title)}</h4>
                   <Badge variant="outline" className={cn("text-xs", priorityStyles[suggestion.priority])}>
-                    {suggestion.priority}
+                    {t(`predictions.priority.${suggestion.priority}`)}
                   </Badge>
                 </div>
 
-                <p className="text-xs text-muted-foreground mb-3 line-clamp-2">{suggestion.description}</p>
+                <p className="text-xs text-muted-foreground mb-3 line-clamp-2">{t(suggestion.description)}</p>
 
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-4">
                     <div className="text-xs">
-                      <span className="text-muted-foreground">Savings: </span>
+                      <span className="text-muted-foreground">{t('predictions.ui.savings')} </span>
                       <span className="font-medium text-energy-green font-mono">
-                        ${suggestion.potentialSavings}/day
+                        {t('common.units.currency')}{suggestion.potentialSavings}{t('predictions.ui.perDay')}
                       </span>
                     </div>
                     <div className="flex items-center gap-1.5 text-xs">
-                      <span className="text-muted-foreground">Confidence:</span>
+                      <span className="text-muted-foreground">{t('predictions.ui.confidence')}</span>
                       <Progress value={suggestion.confidence} className="w-16 h-1.5" />
-                      <span className="font-medium font-mono">{suggestion.confidence}%</span>
+                      <span className="font-medium font-mono">{suggestion.confidence}{t('common.units.percentage')}</span>
                     </div>
                   </div>
 
@@ -137,7 +139,7 @@ export function OptimizationSuggestions() {
                       onClick={() => handleApply(suggestion.id)}
                       disabled={isApplying}
                     >
-                      {isApplying ? "Applying..." : "Apply"}
+                      {isApplying ? t('predictions.ui.applying') : t('predictions.ui.apply')}
                       {!isApplying && <ChevronRight className="w-3 h-3 ml-1" />}
                     </Button>
                   )}
@@ -159,12 +161,12 @@ export function OptimizationSuggestions() {
           {isGenerating ? (
             <>
               <Loader2 className="w-3 h-3 mr-1.5 animate-spin" />
-              Generating...
+              {t('predictions.ui.generating')}
             </>
           ) : (
             <>
               <Sparkles className="w-3 h-3 mr-1.5" />
-              Generate More Suggestions
+              {t('predictions.ui.generateMore')}
             </>
           )}
         </Button>

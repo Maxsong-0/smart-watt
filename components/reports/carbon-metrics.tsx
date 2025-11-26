@@ -1,10 +1,12 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import { useTranslation } from "react-i18next"
 import { Leaf, TreeDeciduous, Car, Factory } from "lucide-react"
 import { Progress } from "@/components/ui/progress"
 
 export function CarbonMetrics() {
+  const { t } = useTranslation()
   const [mounted, setMounted] = useState(false)
   const [progress, setProgress] = useState(0)
 
@@ -17,30 +19,30 @@ export function CarbonMetrics() {
   const metrics = [
     {
       icon: Leaf,
-      label: "CO2 Avoided",
+      label: t('reports.carbon.co2Avoided'),
       value: "124.8",
-      unit: "tons",
+      unit: t('common.units.tons'),
       color: "text-energy-green",
     },
     {
       icon: TreeDeciduous,
-      label: "Trees Equivalent",
+      label: t('reports.carbon.treesEquivalent'),
       value: "2,056",
-      unit: "trees/year",
+      unit: t('reports.carbon.treesPerYear'),
       color: "text-chart-2",
     },
     {
       icon: Car,
-      label: "Cars Off Road",
+      label: t('reports.carbon.carsOffRoad'),
       value: "27",
-      unit: "vehicles",
+      unit: t('reports.carbon.vehicles'),
       color: "text-chart-3",
     },
     {
       icon: Factory,
-      label: "Clean Energy %",
+      label: t('reports.carbon.cleanEnergy'),
       value: "34",
-      unit: "%",
+      unit: t('common.units.percentage'),
       color: "text-energy-cyan",
     },
   ]
@@ -52,11 +54,11 @@ export function CarbonMetrics() {
       {/* Annual Target Progress */}
       <div className="p-3 rounded-lg bg-energy-green/10 border border-energy-green/20">
         <div className="flex items-center justify-between mb-2">
-          <span className="text-sm">Annual Carbon Goal</span>
-          <span className="text-sm font-bold text-energy-green">{progress}%</span>
+          <span className="text-sm">{t('reports.carbon.annualGoal')}</span>
+          <span className="text-sm font-bold text-energy-green">{progress}{t('common.units.percentage')}</span>
         </div>
         <Progress value={progress} className="h-2" />
-        <p className="text-xs text-muted-foreground mt-2">124.8 of 160 tons target</p>
+        <p className="text-xs text-muted-foreground mt-2">{t('reports.carbon.goalProgress', { current: 124.8, total: 160 })}</p>
       </div>
 
       {/* Metric Cards */}

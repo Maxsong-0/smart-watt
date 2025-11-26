@@ -3,6 +3,7 @@
 import type React from "react"
 
 import { useState } from "react"
+import { useTranslation } from "react-i18next"
 import { systemAlerts, type SystemAlert } from "@/lib/mock-data"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
@@ -22,6 +23,7 @@ const severityStyles: Record<SystemAlert["severity"], { bg: string; border: stri
 }
 
 export function SystemAlerts() {
+  const { t } = useTranslation()
   const [alerts, setAlerts] = useState(systemAlerts)
 
   const acknowledgeAlert = (id: string) => {
@@ -37,9 +39,9 @@ export function SystemAlerts() {
     const minutes = Math.floor(diff / (60 * 1000))
     const hours = Math.floor(minutes / 60)
 
-    if (minutes < 60) return `${minutes}m ago`
-    if (hours < 24) return `${hours}h ago`
-    return `${Math.floor(hours / 24)}d ago`
+    if (minutes < 60) return t('config.ui.ago', { time: `${minutes}${t('config.ui.m')}` })
+    if (hours < 24) return t('config.ui.ago', { time: `${hours}${t('config.ui.h')}` })
+    return t('config.ui.ago', { time: `${Math.floor(hours / 24)}d` })
   }
 
   const unacknowledgedCount = alerts.filter((a) => !a.acknowledged).length
@@ -49,14 +51,16 @@ export function SystemAlerts() {
       {unacknowledgedCount > 0 && (
         <div className="flex items-center justify-between text-sm">
           <span className="text-muted-foreground">
-            {unacknowledgedCount} unacknowledged alert{unacknowledgedCount > 1 ? "s" : ""}
+            {unacknowledgedCount > 1
+              ? t('config.systemAlerts.unacknowledgedPlural', { count: unacknowledgedCount })
+              : t('config.systemAlerts.unacknowledged', { count: unacknowledgedCount })}
           </span>
           <Button
             variant="ghost"
             size="sm"
             onClick={() => setAlerts((prev) => prev.map((a) => ({ ...a, acknowledged: true })))}
           >
-            Acknowledge All
+            {t('config.systemAlerts.acknowledgeAll')}
           </Button>
         </div>
       )}
@@ -82,12 +86,12 @@ export function SystemAlerts() {
 
               <div className="flex-1 min-w-0">
                 <div className="flex items-center justify-between gap-2">
-                  <p className="text-sm font-medium truncate">{alert.message}</p>
+                  <p className="text-sm font-medium truncate">{t(alert.message)}</p>
                   <span className="text-xs text-muted-foreground whitespace-nowrap">{formatTime(alert.timestamp)}</span>
                 </div>
 
                 <div className="flex items-center gap-2 mt-2">
-                  <span className="text-xs text-muted-foreground capitalize">{alert.type}</span>
+                  <span className="text-xs text-muted-foreground capitalize">{t(`config.systemAlerts.types.${alert.type}`)}</span>
                   {!alert.acknowledged && (
                     <>
                       <Button
@@ -97,11 +101,11 @@ export function SystemAlerts() {
                         onClick={() => acknowledgeAlert(alert.id)}
                       >
                         <Check className="w-3 h-3 mr-1" />
-                        Acknowledge
+                        {t('config.systemAlerts.acknowledge')}
                       </Button>
                       <Button variant="ghost" size="sm" className="h-6 text-xs" onClick={() => dismissAlert(alert.id)}>
                         <X className="w-3 h-3 mr-1" />
-                        Dismiss
+                        {t('config.systemAlerts.dismiss')}
                       </Button>
                     </>
                   )}
@@ -115,7 +119,7 @@ export function SystemAlerts() {
       {alerts.length === 0 && (
         <div className="text-center py-8 text-muted-foreground">
           <Check className="w-8 h-8 mx-auto mb-2 text-energy-green" />
-          <p className="text-sm">No active alerts</p>
+          <p className="text-sm">{t('config.systemAlerts.empty')}</p>
         </div>
       )}
     </div>

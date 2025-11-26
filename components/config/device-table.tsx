@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { useTranslation } from "react-i18next"
 import { devices, gateways, type Device } from "@/lib/mock-data"
 import { cn } from "@/lib/utils"
 import { Badge } from "@/components/ui/badge"
@@ -22,6 +23,7 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from "
 import { toast } from "sonner"
 
 export function DeviceTable() {
+  const { t } = useTranslation()
   const [deviceList, setDeviceList] = useState<Device[]>(devices)
   const [search, setSearch] = useState("")
   const [filterGateway, setFilterGateway] = useState<string | null>(null)
@@ -45,21 +47,22 @@ export function DeviceTable() {
   })
 
   const getGatewayName = (gatewayId: string) => {
-    return gateways.find((g) => g.id === gatewayId)?.name || "Unknown"
+    const name = gateways.find((g) => g.id === gatewayId)?.name
+    return name ? t(name) : t('config.ui.unknown')
   }
 
   const getStatusBadge = (status: Device["status"]) => {
     switch (status) {
       case "active":
-        return <Badge className="bg-energy-green/10 text-energy-green border-energy-green/30 text-xs">Active</Badge>
+        return <Badge className="bg-energy-green/10 text-energy-green border-energy-green/30 text-xs">{t('config.deviceTable.status.active')}</Badge>
       case "inactive":
         return (
           <Badge variant="secondary" className="text-xs">
-            Inactive
+            {t('config.deviceTable.status.inactive')}
           </Badge>
         )
       case "error":
-        return <Badge className="bg-energy-red/10 text-energy-red border-energy-red/30 text-xs">Error</Badge>
+        return <Badge className="bg-energy-red/10 text-energy-red border-energy-red/30 text-xs">{t('config.deviceTable.status.error')}</Badge>
     }
   }
 
@@ -67,25 +70,29 @@ export function DeviceTable() {
     const diff = Date.now() - date.getTime()
     const minutes = Math.floor(diff / (60 * 1000))
 
-    if (minutes < 1) return "Just now"
-    if (minutes < 60) return `${minutes}m ago`
-    return `${Math.floor(minutes / 60)}h ago`
+    if (minutes < 1) return t('config.ui.ago', { time: `0${t('config.ui.m')}` }) // Or just "Just now" translation
+    if (minutes < 60) return t('config.ui.ago', { time: `${minutes}${t('config.ui.m')}` })
+    return t('config.ui.ago', { time: `${Math.floor(minutes / 60)}${t('config.ui.h')}` })
   }
 
   const handleAddDevice = async () => {
     if (!newDevice.name || !newDevice.type || !newDevice.gatewayId || !newDevice.address) {
-      toast.error("Please fill in all required fields")
+      toast.error(t('config.deviceTable.messages.fillRequired'))
       return
     }
 
     setIsSaving(true)
     await new Promise((resolve) => setTimeout(resolve, 800))
 
+    const selectedGateway = gateways.find((g) => g.id === newDevice.gatewayId)
+    const protocol = selectedGateway ? selectedGateway.type.toUpperCase() : "UNKNOWN"
+
     const device: Device = {
       id: `device-${Date.now()}`,
       name: newDevice.name,
       type: newDevice.type,
       gatewayId: newDevice.gatewayId,
+      protocol,
       address: newDevice.address,
       points: Number.parseInt(newDevice.points),
       status: "active",
@@ -93,7 +100,7 @@ export function DeviceTable() {
     }
 
     setDeviceList((prev) => [...prev, device])
-    toast.success("Device added successfully", { description: newDevice.name })
+    toast.success(t('config.deviceTable.messages.added'), { description: newDevice.name })
 
     setIsSaving(false)
     setIsAddDialogOpen(false)
@@ -107,7 +114,7 @@ export function DeviceTable() {
   const handleDeleteDevice = (device: Device) => {
     setDeviceList((prev) => prev.filter((d) => d.id !== device.id))
     setSelectedDevice(null)
-    toast.success("Device removed", { description: device.name })
+    toast.success(t('config.deviceTable.messages.removed'), { description: device.name })
   }
 
   const handleToggleStatus = (device: Device) => {
@@ -118,7 +125,7 @@ export function DeviceTable() {
           : d,
       ),
     )
-    toast.success(device.status === "active" ? "Device deactivated" : "Device activated", { description: device.name })
+    toast.success(device.status === "active" ? t('config.deviceTable.messages.deactivated') : t('config.deviceTable.messages.activated'), { description: device.name })
   }
 
   return (
@@ -128,7 +135,7 @@ export function DeviceTable() {
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
           <Input
-            placeholder="Search devices..."
+            placeholder={t('config.deviceTable.searchPlaceholder')}
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className="pl-9"
@@ -140,7 +147,7 @@ export function DeviceTable() {
             size="sm"
             onClick={() => setFilterGateway(null)}
           >
-            All
+            {t('config.deviceTable.all')}
           </Button>
           {gateways.map((gw) => (
             <Button
@@ -161,12 +168,12 @@ export function DeviceTable() {
         <Table>
           <TableHeader>
             <TableRow className="bg-secondary/50">
-              <TableHead className="text-xs">Device</TableHead>
-              <TableHead className="text-xs">Gateway</TableHead>
-              <TableHead className="text-xs">Address</TableHead>
-              <TableHead className="text-xs">Points</TableHead>
-              <TableHead className="text-xs">Last Reading</TableHead>
-              <TableHead className="text-xs">Status</TableHead>
+              <TableHead className="text-xs">{t('config.deviceTable.headers.device')}</TableHead>
+              <TableHead className="text-xs">{t('config.deviceTable.headers.gateway')}</TableHead>
+              <TableHead className="text-xs">{t('config.deviceTable.headers.address')}</TableHead>
+              <TableHead className="text-xs">{t('config.deviceTable.headers.points')}</TableHead>
+              <TableHead className="text-xs">{t('config.deviceTable.headers.lastReading')}</TableHead>
+              <TableHead className="text-xs">{t('config.deviceTable.headers.status')}</TableHead>
               <TableHead className="text-xs w-10"></TableHead>
             </TableRow>
           </TableHeader>
@@ -190,7 +197,7 @@ export function DeviceTable() {
                       )}
                     />
                     <div>
-                      <p className="font-medium text-sm">{device.name}</p>
+                      <p className="font-medium text-sm">{t(device.name)}</p>
                       <p className="text-xs text-muted-foreground">{device.type}</p>
                     </div>
                   </div>
@@ -225,23 +232,23 @@ export function DeviceTable() {
 
       <div className="flex items-center justify-between text-xs text-muted-foreground">
         <span>
-          Showing {filteredDevices.length} of {deviceList.length} devices
+          {t('config.deviceTable.showing', { count: filteredDevices.length, total: deviceList.length })}
         </span>
         <Button variant="outline" size="sm" onClick={() => setIsAddDialogOpen(true)}>
           <Plus className="w-4 h-4 mr-1" />
-          Add Device
+          {t('config.deviceTable.addDevice')}
         </Button>
       </div>
 
       <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
-            <DialogTitle>Add New Device</DialogTitle>
-            <DialogDescription>Register a new device to your monitoring system.</DialogDescription>
+            <DialogTitle>{t('config.deviceTable.addNewDevice')}</DialogTitle>
+            <DialogDescription>{t('config.deviceTable.addNewDeviceDesc')}</DialogDescription>
           </DialogHeader>
           <div className="space-y-4 py-4">
             <div className="space-y-2">
-              <Label htmlFor="device-name">Device Name</Label>
+              <Label htmlFor="device-name">{t('config.deviceTable.deviceName')}</Label>
               <Input
                 id="device-name"
                 placeholder="e.g., AHU-1 Main Building"
@@ -250,37 +257,37 @@ export function DeviceTable() {
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="device-type">Device Type</Label>
+              <Label htmlFor="device-type">{t('config.deviceTable.deviceType')}</Label>
               <Select
                 value={newDevice.type}
                 onValueChange={(value) => setNewDevice((prev) => ({ ...prev, type: value }))}
               >
                 <SelectTrigger>
-                  <SelectValue placeholder="Select type" />
+                  <SelectValue placeholder={t('config.deviceTable.selectType')} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="AHU">Air Handling Unit (AHU)</SelectItem>
-                  <SelectItem value="VAV">Variable Air Volume (VAV)</SelectItem>
-                  <SelectItem value="Chiller">Chiller</SelectItem>
-                  <SelectItem value="Boiler">Boiler</SelectItem>
-                  <SelectItem value="Meter">Energy Meter</SelectItem>
-                  <SelectItem value="Sensor">Sensor</SelectItem>
+                  <SelectItem value="AHU">{t('config.deviceTable.types.AHU')}</SelectItem>
+                  <SelectItem value="VAV">{t('config.deviceTable.types.VAV')}</SelectItem>
+                  <SelectItem value="Chiller">{t('config.deviceTable.types.Chiller')}</SelectItem>
+                  <SelectItem value="Boiler">{t('config.deviceTable.types.Boiler')}</SelectItem>
+                  <SelectItem value="Meter">{t('config.deviceTable.types.Meter')}</SelectItem>
+                  <SelectItem value="Sensor">{t('config.deviceTable.types.Sensor')}</SelectItem>
                 </SelectContent>
               </Select>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="gateway">Gateway</Label>
+              <Label htmlFor="gateway">{t('config.deviceTable.headers.gateway')}</Label>
               <Select
                 value={newDevice.gatewayId}
                 onValueChange={(value) => setNewDevice((prev) => ({ ...prev, gatewayId: value }))}
               >
                 <SelectTrigger>
-                  <SelectValue placeholder="Select gateway" />
+                  <SelectValue placeholder={t('config.deviceTable.selectGateway')} />
                 </SelectTrigger>
                 <SelectContent>
                   {gateways.map((gw) => (
                     <SelectItem key={gw.id} value={gw.id}>
-                      {gw.name} ({gw.type.toUpperCase()})
+                      {t(gw.name)} ({gw.type.toUpperCase()})
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -288,7 +295,7 @@ export function DeviceTable() {
             </div>
             <div className="grid grid-cols-2 gap-3">
               <div className="space-y-2">
-                <Label htmlFor="address">Device Address</Label>
+                <Label htmlFor="address">{t('config.deviceTable.deviceAddress')}</Label>
                 <Input
                   id="address"
                   placeholder="e.g., 1001"
@@ -297,7 +304,7 @@ export function DeviceTable() {
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="points">Data Points</Label>
+                <Label htmlFor="points">{t('config.deviceTable.dataPoints')}</Label>
                 <Input
                   id="points"
                   type="number"
@@ -310,18 +317,18 @@ export function DeviceTable() {
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setIsAddDialogOpen(false)}>
-              Cancel
+              {t('common.cancel')}
             </Button>
             <Button onClick={handleAddDevice} disabled={isSaving}>
               {isSaving ? (
                 <>
                   <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                  Adding...
+                  {t('config.deviceTable.adding')}
                 </>
               ) : (
                 <>
                   <Check className="w-4 h-4 mr-2" />
-                  Add Device
+                  {t('config.deviceTable.addDevice')}
                 </>
               )}
             </Button>
@@ -332,30 +339,30 @@ export function DeviceTable() {
       <Sheet open={!!selectedDevice} onOpenChange={() => setSelectedDevice(null)}>
         <SheetContent className="sm:max-w-md">
           <SheetHeader>
-            <SheetTitle>{selectedDevice?.name}</SheetTitle>
-            <SheetDescription>{selectedDevice?.type} Device Details</SheetDescription>
+            <SheetTitle>{selectedDevice ? t(selectedDevice.name) : ''}</SheetTitle>
+            <SheetDescription>{selectedDevice ? `${selectedDevice.type} ${t('config.deviceTable.deviceDetails')}` : ''}</SheetDescription>
           </SheetHeader>
           {selectedDevice && (
             <div className="space-y-6 py-6">
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-1">
-                  <p className="text-xs text-muted-foreground">Status</p>
+                  <p className="text-xs text-muted-foreground">{t('config.deviceTable.headers.status')}</p>
                   {getStatusBadge(selectedDevice.status)}
                 </div>
                 <div className="space-y-1">
-                  <p className="text-xs text-muted-foreground">Gateway</p>
+                  <p className="text-xs text-muted-foreground">{t('config.deviceTable.headers.gateway')}</p>
                   <p className="text-sm font-medium">{getGatewayName(selectedDevice.gatewayId)}</p>
                 </div>
                 <div className="space-y-1">
-                  <p className="text-xs text-muted-foreground">Address</p>
+                  <p className="text-xs text-muted-foreground">{t('config.deviceTable.headers.address')}</p>
                   <code className="text-sm bg-secondary px-2 py-1 rounded">{selectedDevice.address}</code>
                 </div>
                 <div className="space-y-1">
-                  <p className="text-xs text-muted-foreground">Data Points</p>
+                  <p className="text-xs text-muted-foreground">{t('config.deviceTable.headers.points')}</p>
                   <p className="text-sm font-medium">{selectedDevice.points}</p>
                 </div>
                 <div className="space-y-1 col-span-2">
-                  <p className="text-xs text-muted-foreground">Last Reading</p>
+                  <p className="text-xs text-muted-foreground">{t('config.deviceTable.headers.lastReading')}</p>
                   <p className="text-sm font-medium">{formatTime(selectedDevice.lastReading)}</p>
                 </div>
               </div>
@@ -367,7 +374,7 @@ export function DeviceTable() {
                   onClick={() => handleToggleStatus(selectedDevice)}
                 >
                   <Settings className="w-4 h-4 mr-2" />
-                  {selectedDevice.status === "active" ? "Deactivate Device" : "Activate Device"}
+                  {selectedDevice.status === "active" ? t('config.deviceTable.deactivate') : t('config.deviceTable.activate')}
                 </Button>
                 <Button
                   variant="outline"
@@ -375,7 +382,7 @@ export function DeviceTable() {
                   onClick={() => handleDeleteDevice(selectedDevice)}
                 >
                   <Trash2 className="w-4 h-4 mr-2" />
-                  Remove Device
+                  {t('config.deviceTable.remove')}
                 </Button>
               </div>
             </div>

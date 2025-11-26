@@ -2,6 +2,7 @@
 
 import type React from "react"
 import { useState, useEffect } from "react"
+import { useTranslation } from "react-i18next"
 import { drPrograms, type DRProgram } from "@/lib/mock-data"
 import { cn } from "@/lib/utils"
 import { Progress } from "@/components/ui/progress"
@@ -16,6 +17,7 @@ const typeIcons: Record<DRProgram["type"], React.ElementType> = {
 }
 
 export function DRPrograms() {
+  const { t } = useTranslation()
   const [programs, setPrograms] = useState(drPrograms)
   const [mounted, setMounted] = useState(false)
   const [progressVisible, setProgressVisible] = useState(false)
@@ -72,8 +74,10 @@ export function DRPrograms() {
                   )}
                 </div>
                 <div>
-                  <h4 className="font-medium text-sm">{program.name}</h4>
-                  <p className="text-xs text-muted-foreground capitalize">{program.type} Program</p>
+                  <h4 className="font-medium text-sm">{t(program.name)}</h4>
+                  <p className="text-xs text-muted-foreground capitalize">
+                    {t(`grid.types.${program.type}`)} {t('grid.programCard.programLabel')}
+                  </p>
                 </div>
               </div>
 
@@ -84,7 +88,7 @@ export function DRPrograms() {
                     program.enrolled ? "text-energy-green" : "text-muted-foreground",
                   )}
                 >
-                  {program.enrolled ? "Enrolled" : "Not Enrolled"}
+                  {program.enrolled ? t('grid.programCard.enrolled') : t('grid.programCard.notEnrolled')}
                 </span>
                 <Switch checked={program.enrolled} onCheckedChange={() => toggleEnrollment(program.id)} />
               </div>
@@ -94,9 +98,9 @@ export function DRPrograms() {
               <div className="animate-slide-in-up" style={{ animationDelay: "0.1s" }}>
                 <div className="mb-3">
                   <div className="flex items-center justify-between text-xs mb-1">
-                    <span className="text-muted-foreground">Commitment</span>
+                    <span className="text-muted-foreground">{t('grid.programCard.commitment')}</span>
                     <span className="font-medium font-mono">
-                      {program.currentCommitment} / {program.maxCommitment} kW
+                      {program.currentCommitment} / {program.maxCommitment} {t('common.units.kw')}
                     </span>
                   </div>
                   <Progress value={commitmentPercent} className="h-1.5 transition-all duration-1000" />
@@ -106,14 +110,14 @@ export function DRPrograms() {
                   <div className="flex items-center gap-1.5 p-2 rounded-lg bg-energy-green/5 border border-energy-green/10">
                     <DollarSign className="w-3 h-3 text-energy-green" />
                     <div>
-                      <p className="text-muted-foreground">YTD Revenue</p>
+                      <p className="text-muted-foreground">{t('grid.programCard.ytdRevenue')}</p>
                       <p className="font-medium text-energy-green font-mono">${program.revenue.toLocaleString()}</p>
                     </div>
                   </div>
                   <div className="flex items-center gap-1.5 p-2 rounded-lg bg-secondary/50">
                     <Calendar className="w-3 h-3 text-muted-foreground" />
                     <div>
-                      <p className="text-muted-foreground">Events</p>
+                      <p className="text-muted-foreground">{t('grid.programCard.events')}</p>
                       <p className="font-medium font-mono">{program.events}</p>
                     </div>
                   </div>
@@ -122,7 +126,7 @@ export function DRPrograms() {
                       className={cn("w-3 h-3", program.performance >= 90 ? "text-energy-green" : "text-energy-yellow")}
                     />
                     <div>
-                      <p className="text-muted-foreground">Performance</p>
+                      <p className="text-muted-foreground">{t('grid.programCard.performance')}</p>
                       <p
                         className={cn(
                           "font-medium font-mono",

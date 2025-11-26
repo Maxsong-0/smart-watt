@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect, useRef } from "react"
+import { useTranslation } from "react-i18next"
 import { drPrograms } from "@/lib/mock-data"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -43,6 +44,7 @@ function AnimatedValue({ value, prefix = "" }: { value: number; prefix?: string 
 }
 
 export function RevenueCalculator() {
+  const { t } = useTranslation()
   const [commitment, setCommitment] = useState(200)
   const [events, setEvents] = useState(12)
   const [mounted, setMounted] = useState(false)
@@ -64,13 +66,13 @@ export function RevenueCalculator() {
     <div className="space-y-4">
       <div className="grid grid-cols-2 gap-4 p-4 rounded-lg bg-secondary/50">
         <div className="animate-slide-in-up">
-          <p className="text-xs text-muted-foreground mb-1">Programs Enrolled</p>
+          <p className="text-xs text-muted-foreground mb-1">{t('grid.revenue.programsEnrolled')}</p>
           <p className="text-2xl font-bold font-mono">{totalEnrolled}</p>
         </div>
         <div className="animate-slide-in-up" style={{ animationDelay: "0.1s" }}>
-          <p className="text-xs text-muted-foreground mb-1">YTD Revenue</p>
+          <p className="text-xs text-muted-foreground mb-1">{t('grid.revenue.ytd')}</p>
           <p className="text-2xl font-bold text-energy-green font-mono">
-            <AnimatedValue value={totalRevenue} prefix="$" />
+            <AnimatedValue value={totalRevenue} prefix={t('common.units.currency')} />
           </p>
         </div>
       </div>
@@ -78,11 +80,11 @@ export function RevenueCalculator() {
       <div className="space-y-3">
         <h4 className="text-sm font-medium flex items-center gap-2">
           <Calculator className="w-4 h-4 text-energy-cyan" />
-          Revenue Estimator
+          {t('grid.revenue.estimator')}
         </h4>
 
         <div className="space-y-2">
-          <Label className="text-xs text-muted-foreground">Commitment (kW)</Label>
+          <Label className="text-xs text-muted-foreground">{t('grid.revenue.commitmentLabel')}</Label>
           <Input
             type="number"
             value={commitment}
@@ -92,7 +94,7 @@ export function RevenueCalculator() {
         </div>
 
         <div className="space-y-2">
-          <Label className="text-xs text-muted-foreground">Expected Events/Year</Label>
+          <Label className="text-xs text-muted-foreground">{t('grid.revenue.eventsLabel')}</Label>
           <Input
             type="number"
             value={events}
@@ -110,16 +112,16 @@ export function RevenueCalculator() {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <TrendingUp className="w-4 h-4 text-energy-green" />
-              <span className="text-sm text-muted-foreground">Projected Annual</span>
+              <span className="text-sm text-muted-foreground">{t('grid.revenue.projectedAnnual')}</span>
             </div>
             <div className="flex items-center gap-1 text-lg font-bold text-energy-green font-mono">
               <DollarSign className="w-4 h-4" />
-              <AnimatedValue value={projectedRevenue} />
+              <AnimatedValue value={projectedRevenue} prefix={t('common.units.currency')} />
             </div>
           </div>
           <div className="flex items-center gap-1 mt-2 text-xs text-muted-foreground">
             <Sparkles className="w-3 h-3 text-energy-cyan" />
-            <span>Based on historical program data</span>
+            <span>{t('grid.revenue.projectedFootnote')}</span>
           </div>
         </div>
       </div>

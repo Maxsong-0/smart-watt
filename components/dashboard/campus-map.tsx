@@ -1,12 +1,14 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { useTranslation } from "react-i18next"
 import { buildings, type Building } from "@/lib/mock-data"
 import { cn } from "@/lib/utils"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 import Link from "next/link"
 
 export function CampusMap() {
+  const { t } = useTranslation()
   const [mounted, setMounted] = useState(false)
   const [selectedBuilding, setSelectedBuilding] = useState<string | null>(null)
   const [liveData, setLiveData] = useState<Record<string, number>>({})
@@ -149,14 +151,14 @@ export function CampusMap() {
         {/* Campus label with scanner effect */}
         <div className="absolute top-4 left-4 text-xs text-muted-foreground font-mono uppercase tracking-wider flex items-center gap-2">
           <span className="w-2 h-2 rounded-full bg-energy-cyan animate-pulse" />
-          Campus Overview - Live
+          {t('dashboard.campusMapUI.overview')}
         </div>
 
         {/* Total power indicator */}
         <div className="absolute top-4 right-4 text-right">
-          <p className="text-xs text-muted-foreground font-mono">TOTAL LOAD</p>
+          <p className="text-xs text-muted-foreground font-mono">{t('dashboard.campusMapUI.totalLoad')}</p>
           <p className="text-xl font-bold text-energy-cyan font-mono">
-            {Math.round(Object.values(liveData).reduce((a, b) => a + b, 0)).toLocaleString()} kW
+            {Math.round(Object.values(liveData).reduce((a, b) => a + b, 0)).toLocaleString()} {t('common.units.kw')}
           </p>
         </div>
 
@@ -196,7 +198,7 @@ export function CampusMap() {
                 >
                   <span className="text-primary-foreground drop-shadow-md text-sm">{loadPercent}%</span>
                   <span className="text-[9px] text-primary-foreground/80 truncate max-w-full px-1">
-                    {Math.round(liveData[building.id] || building.currentLoad)}kW
+                    {Math.round(liveData[building.id] || building.currentLoad)}{t('common.units.kw')}
                   </span>
 
                   {/* Ripple effect for DR active */}
@@ -207,14 +209,14 @@ export function CampusMap() {
               </TooltipTrigger>
               <TooltipContent side="top" className="max-w-xs">
                 <div className="space-y-1">
-                  <p className="font-semibold">{building.name}</p>
+                  <p className="font-semibold">{t(building.name)}</p>
                   <div className="text-xs space-y-0.5 text-muted-foreground">
                     <p>
-                      Load: {Math.round(liveData[building.id] || building.currentLoad)} / {building.maxCapacity} kW
+                      {t('dashboard.campusMapUI.tooltip.load')}: {Math.round(liveData[building.id] || building.currentLoad)} / {building.maxCapacity} {t('common.units.kw')}
                     </p>
-                    <p>Temperature: {building.temperature}°F</p>
-                    <p>HVAC: {building.hvacStatus.toUpperCase()}</p>
-                    <p className="capitalize">Status: {building.status.replace("-", " ")}</p>
+                    <p>{t('dashboard.campusMapUI.tooltip.temperature')}: {building.temperature}{t('common.units.f')}</p>
+                    <p>{t('dashboard.campusMapUI.tooltip.hvac')}: {t(`status.${building.hvacStatus}`)}</p>
+                    <p className="capitalize">{t('dashboard.campusMapUI.tooltip.status')}: {t(`buildings.card.status.${building.status}`)}</p>
                   </div>
                 </div>
               </TooltipContent>
@@ -224,13 +226,13 @@ export function CampusMap() {
 
         {/* Legend */}
         <div className="absolute bottom-4 right-4 bg-card/90 backdrop-blur-sm rounded-lg p-3 border border-border">
-          <p className="text-xs font-medium mb-2 text-foreground">Status</p>
+          <p className="text-xs font-medium mb-2 text-foreground">{t('dashboard.campusMapUI.legend.title')}</p>
           <div className="space-y-1.5">
             {[
-              { status: "normal", label: "Normal" },
-              { status: "warning", label: "Warning" },
-              { status: "critical", label: "Critical" },
-              { status: "dr-active", label: "DR Active" },
+              { status: "normal", label: "normal" },
+              { status: "warning", label: "warning" },
+              { status: "critical", label: "critical" },
+              { status: "dr-active", label: "drActive" },
             ].map(({ status, label }) => (
               <div key={status} className="flex items-center gap-2">
                 <div
@@ -240,7 +242,7 @@ export function CampusMap() {
                     status === "dr-active" && "animate-pulse",
                   )}
                 />
-                <span className="text-xs text-muted-foreground">{label}</span>
+                <span className="text-xs text-muted-foreground">{t(`dashboard.campusMapUI.legend.${label}`)}</span>
               </div>
             ))}
           </div>

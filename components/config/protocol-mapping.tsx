@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { useTranslation } from "react-i18next"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -63,6 +64,7 @@ const initialMappings: Mapping[] = [
 ]
 
 export function ProtocolMapping() {
+  const { t } = useTranslation()
   const [mappings, setMappings] = useState<Mapping[]>(initialMappings)
   const [isAdding, setIsAdding] = useState(false)
   const [editingId, setEditingId] = useState<string | null>(null)
@@ -77,7 +79,7 @@ export function ProtocolMapping() {
 
   const handleSaveMapping = async () => {
     if (!newMapping.sourcePoint || !newMapping.targetName || !newMapping.unit) {
-      toast.error("Please fill in all required fields")
+      toast.error(t("config.protocolMapping.required"))
       return
     }
 
@@ -85,22 +87,20 @@ export function ProtocolMapping() {
     await new Promise((resolve) => setTimeout(resolve, 500))
 
     if (editingId) {
-      // Update existing mapping
       setMappings((prev) =>
         prev.map((m) =>
           m.id === editingId ? { ...m, ...newMapping, transform: newMapping.transform || undefined } : m,
         ),
       )
-      toast.success("Mapping updated")
+      toast.success(t("common.success"))
     } else {
-      // Add new mapping
       const mapping: Mapping = {
         id: `m${Date.now()}`,
         ...newMapping,
         transform: newMapping.transform || undefined,
       }
       setMappings((prev) => [...prev, mapping])
-      toast.success("Mapping added", { description: newMapping.targetName })
+      toast.success(t("config.protocolMapping.added"), { description: newMapping.targetName })
     }
 
     setIsSaving(false)
@@ -130,7 +130,7 @@ export function ProtocolMapping() {
   const handleDeleteMapping = (id: string) => {
     const mapping = mappings.find((m) => m.id === id)
     setMappings((prev) => prev.filter((m) => m.id !== id))
-    toast.success("Mapping deleted", { description: mapping?.targetName })
+    toast.success(t("config.protocolMapping.delete"), { description: mapping?.targetName })
   }
 
   const handleCancel = () => {
@@ -196,7 +196,7 @@ export function ProtocolMapping() {
         <div className="p-4 rounded-lg border border-primary/30 bg-card space-y-3">
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <Label className="text-xs">Protocol</Label>
+              <Label className="text-xs">{t("config.protocolMapping.sourceProtocol")}</Label>
               <Select
                 value={newMapping.sourceProtocol}
                 onValueChange={(value) => setNewMapping((prev) => ({ ...prev, sourceProtocol: value }))}
@@ -213,7 +213,7 @@ export function ProtocolMapping() {
               </Select>
             </div>
             <div>
-              <Label className="text-xs">Source Point</Label>
+              <Label className="text-xs">{t("config.protocolMapping.sourcePoint")}</Label>
               <Input
                 placeholder="AV:1003"
                 className="h-8"
@@ -222,7 +222,7 @@ export function ProtocolMapping() {
               />
             </div>
             <div>
-              <Label className="text-xs">Target Name</Label>
+              <Label className="text-xs">{t("config.protocolMapping.targetName")}</Label>
               <Input
                 placeholder="my_point_name"
                 className="h-8"
@@ -231,9 +231,9 @@ export function ProtocolMapping() {
               />
             </div>
             <div>
-              <Label className="text-xs">Unit</Label>
+              <Label className="text-xs">{t("config.protocolMapping.unit")}</Label>
               <Input
-                placeholder="°F"
+                placeholder={t("common.units.f")}
                 className="h-8"
                 value={newMapping.unit}
                 onChange={(e) => setNewMapping((prev) => ({ ...prev, unit: e.target.value }))}
@@ -241,7 +241,7 @@ export function ProtocolMapping() {
             </div>
           </div>
           <div>
-            <Label className="text-xs">Transform (optional)</Label>
+            <Label className="text-xs">{t("config.protocolMapping.transform")}</Label>
             <Input
               placeholder="x * 0.1"
               className="h-8"
@@ -252,18 +252,18 @@ export function ProtocolMapping() {
           <div className="flex justify-end gap-2">
             <Button variant="ghost" size="sm" onClick={handleCancel}>
               <X className="w-4 h-4 mr-1" />
-              Cancel
+              {t("common.cancel")}
             </Button>
             <Button size="sm" onClick={handleSaveMapping} disabled={isSaving}>
               {isSaving ? (
                 <>
                   <Loader2 className="w-4 h-4 mr-1 animate-spin" />
-                  Saving...
+                  {t("config.protocolMapping.saving")}
                 </>
               ) : (
                 <>
                   <Check className="w-4 h-4 mr-1" />
-                  {editingId ? "Update" : "Save"} Mapping
+                  {editingId ? t("config.protocolMapping.update") : t("config.protocolMapping.save")}
                 </>
               )}
             </Button>
@@ -272,7 +272,7 @@ export function ProtocolMapping() {
       ) : (
         <Button variant="outline" className="w-full bg-transparent" onClick={() => setIsAdding(true)}>
           <Plus className="w-4 h-4 mr-2" />
-          Add Point Mapping
+          {t("config.protocolMapping.add")}
         </Button>
       )}
     </div>

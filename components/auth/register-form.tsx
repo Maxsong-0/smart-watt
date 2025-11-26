@@ -29,7 +29,6 @@ export function RegisterForm() {
     e.preventDefault()
     setError("")
 
-    // Validation
     if (password !== confirmPassword) {
       setError(t("auth.passwordMismatch"))
       return
@@ -84,7 +83,7 @@ export function RegisterForm() {
           <Input
             id="email"
             type="email"
-            placeholder="you@example.com"
+            placeholder={t("auth.email")}
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
@@ -97,7 +96,7 @@ export function RegisterForm() {
           <Input
             id="password"
             type="password"
-            placeholder="••••••••"
+            placeholder={t("auth.password")}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
@@ -110,7 +109,7 @@ export function RegisterForm() {
           <Input
             id="confirmPassword"
             type="password"
-            placeholder="••••••••"
+            placeholder={t("auth.confirmPassword")}
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
             required

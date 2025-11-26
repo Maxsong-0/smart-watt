@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import { useTranslation } from "react-i18next"
 import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis, Cell, ReferenceLine } from "recharts"
 
 const comparisonData = [
@@ -19,6 +20,7 @@ const comparisonData = [
 ]
 
 export function MonthlyComparison() {
+  const { t } = useTranslation()
   const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
@@ -28,43 +30,47 @@ export function MonthlyComparison() {
   if (!mounted) return <div className="h-[280px] animate-pulse bg-muted rounded-lg" />
 
   const avgBaseline = comparisonData.reduce((sum, d) => sum + d.baseline, 0) / 12
+  const chartData = comparisonData.map((item) => ({
+    ...item,
+    label: t(`reports.savingsChart.months.${item.month}`),
+  }))
 
   return (
     <div className="space-y-4">
       <div className="h-[280px] w-full">
         <ResponsiveContainer width="100%" height="100%">
-          <BarChart data={comparisonData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
+          <BarChart data={chartData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
             <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" vertical={false} />
-            <XAxis dataKey="month" stroke="var(--muted-foreground)" fontSize={11} tickLine={false} axisLine={false} />
-            <YAxis
-              stroke="var(--muted-foreground)"
-              fontSize={11}
-              tickLine={false}
-              axisLine={false}
-              tickFormatter={(value) => `$${value / 1000}k`}
-            />
+            <XAxis dataKey="label" stroke="var(--muted-foreground)" fontSize={11} tickLine={false} axisLine={false} />
+          <YAxis
+            stroke="var(--muted-foreground)"
+            fontSize={11}
+            tickLine={false}
+            axisLine={false}
+            tickFormatter={(value) => `${t('common.units.currency')}${value / 1000}k`}
+          />
             <Tooltip
-              contentStyle={{
-                backgroundColor: "var(--card)",
-                border: "1px solid var(--border)",
-                borderRadius: "8px",
-                fontSize: "12px",
-              }}
-              formatter={(value: number | null, name: string) => [
-                value ? `$${value.toLocaleString()}` : "N/A",
-                name === "baseline" ? "Baseline Year" : "Current Year",
-              ]}
-            />
-            <ReferenceLine
-              y={avgBaseline}
-              stroke="var(--energy-yellow)"
-              strokeDasharray="5 5"
-              label={{ value: "Avg Baseline", fill: "var(--energy-yellow)", fontSize: 10 }}
-            />
-            <Bar dataKey="baseline" fill="var(--muted)" radius={[4, 4, 0, 0]} animationDuration={1200} />
-            <Bar dataKey="current" radius={[4, 4, 0, 0]} animationDuration={1200} animationBegin={300}>
-              {comparisonData.map((entry, index) => (
-                <Cell
+            contentStyle={{
+              backgroundColor: "var(--card)",
+              border: "1px solid var(--border)",
+              borderRadius: "8px",
+              fontSize: "12px",
+            }}
+            formatter={(value: number | null, name: string) => [
+              value ? `${t('common.units.currency')}${value.toLocaleString()}` : t('common.na'),
+              name === "baseline" ? t('reports.comparison.tooltipBaseline') : t('reports.comparison.tooltipCurrent'),
+            ]}
+          />
+          <ReferenceLine
+            y={avgBaseline}
+            stroke="var(--energy-yellow)"
+            strokeDasharray="5 5"
+            label={{ value: t('reports.comparison.averageBaseline'), fill: "var(--energy-yellow)", fontSize: 10 }}
+          />
+          <Bar dataKey="baseline" fill="var(--muted)" radius={[4, 4, 0, 0]} animationDuration={1200} />
+          <Bar dataKey="current" radius={[4, 4, 0, 0]} animationDuration={1200} animationBegin={300}>
+            {comparisonData.map((entry, index) => (
+              <Cell
                   key={`cell-${index}`}
                   fill={entry.current ? "var(--chart-1)" : "var(--muted)"}
                   opacity={entry.current ? 1 : 0.3}
@@ -77,15 +83,15 @@ export function MonthlyComparison() {
       <div className="flex items-center justify-center gap-6 text-xs">
         <div className="flex items-center gap-1.5">
           <div className="w-3 h-3 bg-muted rounded" />
-          <span className="text-muted-foreground">Baseline Year</span>
+          <span className="text-muted-foreground">{t('reports.comparison.baseline')}</span>
         </div>
         <div className="flex items-center gap-1.5">
           <div className="w-3 h-3 bg-chart-1 rounded" />
-          <span className="text-muted-foreground">Current Year</span>
+          <span className="text-muted-foreground">{t('reports.comparison.current')}</span>
         </div>
         <div className="flex items-center gap-1.5">
           <div className="w-6 h-0.5 bg-energy-yellow" style={{ borderStyle: "dashed" }} />
-          <span className="text-muted-foreground">Average Baseline</span>
+          <span className="text-muted-foreground">{t('reports.comparison.averageBaseline')}</span>
         </div>
       </div>
     </div>
